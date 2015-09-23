@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import GameEngine.entities.Animation;
 import GameEngine.entities.Camera;
 import GameEngine.entities.Entity;
 import GameEngine.entities.Light;
-import GameEngine.entities.Player;
 import GameEngine.guis.GuiRenderer;
 import GameEngine.guis.GuiTexture;
+import GameEngine.guis.components.Button;
 import GameEngine.main.Screen;
 import GameEngine.models.RawModel;
 import GameEngine.models.TexturedModel;
-import GameEngine.renderEngine.DisplayManager;
 import GameEngine.renderEngine.Loader;
 import GameEngine.renderEngine.MasterRenderer;
 import GameEngine.renderEngine.OBJLoader;
@@ -24,10 +24,14 @@ import GameEngine.terrains.Terrain;
 import GameEngine.textures.ModelTexture;
 import GameEngine.textures.TerrainTexture;
 import GameEngine.textures.TerrainTexturePack;
+import game.main.Player.Player;
 
 public class GameScreen implements Screen{
 	
 	public List<Entity> entities = new ArrayList<Entity>();
+	public List<Player> players = new ArrayList<Player>();
+	public Animation c;
+	public Entity dragon;
 	//public List<Light> lights = new ArrayList<Light>();
 	public Light light;
 	public Loader loader = new Loader();
@@ -42,6 +46,7 @@ public class GameScreen implements Screen{
 	public TexturedModel grass;
 	public TexturedModel flower;
 	public TexturedModel bobble;
+	Button b;
 	
 	public GameScreen() {
 		
@@ -56,6 +61,9 @@ public class GameScreen implements Screen{
 		//genTerrain();
 		//GuiTexture health = new GuiTexture(loader.loadTexture("gui/health"), new Vector2f(-0.74f, 0.925f), new Vector2f(0.25f, 0.25f));
 		//guis.add(health);
+		b = new Button(loader.loadTexture("gui/health"), new Vector2f(640, 360), new Vector2f(0.20f, 0.25f), 0, 0);
+		
+		guis.add(b);
 	}
 	
 	@Override
@@ -65,6 +73,8 @@ public class GameScreen implements Screen{
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);
 		}
+		b.render();
+//		c.render(dragon);
 		renderer.render(light, camera);
 		guiRenderer.render(guis);
 	}
@@ -102,13 +112,19 @@ public class GameScreen implements Screen{
 				flower.getTexture().setUseFakeLighting(true);
 				fern.getTexture().setHasTransparency(true);
 				
-				RawModel playerModel = OBJLoader.loadObjModel("player", loader);
-				TexturedModel playerTexturedModel = new TexturedModel(playerModel, new ModelTexture(loader.loadTexture("playerTexture")));
 				camera = new Camera();
-				RawModel dragonModel = OBJLoader.loadObjModel("dragon", loader);
-				TexturedModel dragonTex = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
-				Entity dragon = new Entity(dragonTex, new Vector3f(150, 40, -275), 0, 0, 0, 1);
-				entities.add(dragon);
+				
+//				RawModel dragonModel = OBJLoader.loadObjModel("Catapult/Catapult_Animation_000001", loader);
+//				TexturedModel dragonTex = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
+//				dragon = new Entity(dragonTex, new Vector3f(150, 40, -275), 0, 0, 0, 0.1f);
+//				entities.add(dragon);
+//				c = new Animation("Catapult/Catapult_Animation", 30, loader, "white");
+				
+				
+				for (Player player : players) {
+					player.init(loader, new Vector3f(50, 50, 50));
+				}
+				
 	}
 	
 	public void genTerrain() {

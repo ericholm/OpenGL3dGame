@@ -59,14 +59,21 @@ public class OBJFileLoader {
 				}
 			}
 			while (line != null && line.startsWith("f ")) {
-				String[] currentLine = line.split(" ");
-				String[] vertex1 = currentLine[1].split("/");
-				String[] vertex2 = currentLine[2].split("/");
-				String[] vertex3 = currentLine[3].split("/");
-				processVertex(vertex1, vertices, indices);
-				processVertex(vertex2, vertices, indices);
-				processVertex(vertex3, vertices, indices);
-				line = reader.readLine();
+				try {
+					String[] currentLine = line.split(" ");
+					String[] vertex1 = currentLine[1].split("/");
+					String[] vertex2 = currentLine[2].split("/");
+					String[] vertex3 = currentLine[3].split("/");
+					processVertex(vertex1, vertices, indices);
+					processVertex(vertex2, vertices, indices);
+					processVertex(vertex3, vertices, indices);
+					line = reader.readLine();
+				}
+				catch (NumberFormatException e){
+					System.out.println(line + ": Error");
+					e.printStackTrace();
+				}
+				
 			}
 			reader.close();
 		} catch (IOException e) {

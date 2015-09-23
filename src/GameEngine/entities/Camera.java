@@ -16,8 +16,6 @@ public class Camera {
 	private float roll;
 	private float speed = 0.5f;
 
-	private Player player;
-
 	public Camera() {
 		//this.player = player;
 	}

@@ -2,12 +2,13 @@ package game.main;
 
 import GameEngine.main.Game;
 import game.main.Screens.GameScreen;
+import game.main.Screens.StartScreen;
 
 public class Main extends Game{
 	
 	public Main() {
 		super();
-		this.setScreen(new GameScreen());
+		this.setScreen(new StartScreen());
 	}
 	
 	public static void main(String[] args) {
