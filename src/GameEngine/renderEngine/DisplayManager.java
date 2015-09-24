@@ -42,7 +42,6 @@ public class DisplayManager {
 		long currentFrameTime = getCurrentTime();
 		delta = (currentFrameTime - lastFrameTime) / 1000f;
 		lastFrameTime = currentFrameTime;
-
 	}
 
 	public static float getFrameTimeSeconds() {

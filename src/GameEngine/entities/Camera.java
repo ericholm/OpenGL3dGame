@@ -5,19 +5,32 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-public class Camera {
+import game.main.Player.Player;
 
-	private float distanceFromPlayer = 50;
+public class Camera {
+	
+	private Player currentPlayerTracking;
+	private float distanceFromPlayer = 120;
 	private float angleAroundPlayer = 0;
 
-	private Vector3f position = new Vector3f(150, 50, -200);
-	private float pitch = 0;
+	private Vector3f position = new Vector3f(400, 50, -200);
+	private float pitch = 30;
 	private float yaw = 0;
 	private float roll;
 	private float speed = 0.5f;
 
 	public Camera() {
 		//this.player = player;
+	}
+	
+	public void setPlayerToTrack(Player player) {
+		currentPlayerTracking = player;
+	}
+	
+	public void render() {
+		this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
+		this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
+		this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z + distanceFromPlayer;
 	}
 
 	public void move() {

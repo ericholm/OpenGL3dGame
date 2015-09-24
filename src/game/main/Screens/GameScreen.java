@@ -14,22 +14,29 @@ import GameEngine.entities.Light;
 import GameEngine.guis.GuiRenderer;
 import GameEngine.guis.GuiTexture;
 import GameEngine.guis.components.Button;
+import GameEngine.guis.components.ButtonAction;
+import GameEngine.main.Game;
 import GameEngine.main.Screen;
+import GameEngine.models.ModelData;
 import GameEngine.models.RawModel;
 import GameEngine.models.TexturedModel;
 import GameEngine.renderEngine.Loader;
 import GameEngine.renderEngine.MasterRenderer;
+import GameEngine.renderEngine.OBJFileLoader;
 import GameEngine.renderEngine.OBJLoader;
 import GameEngine.terrains.Terrain;
 import GameEngine.textures.ModelTexture;
 import GameEngine.textures.TerrainTexture;
 import GameEngine.textures.TerrainTexturePack;
+import game.main.Managers.GameStateManager;
+import game.main.Managers.GameStates;
 import game.main.Player.Player;
+import game.main.board.Board;
 
-public class GameScreen implements Screen{
+public class GameScreen implements Screen, ButtonAction {
 	
-	public List<Entity> entities = new ArrayList<Entity>();
-	public List<Player> players = new ArrayList<Player>();
+	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	public ArrayList<Player> players = new ArrayList<Player>();
 	public Animation c;
 	public Entity dragon;
 	//public List<Light> lights = new ArrayList<Light>();
@@ -38,7 +45,7 @@ public class GameScreen implements Screen{
 	public MasterRenderer renderer;
 	public Camera camera;
 	public Player player;
-	public List<GuiTexture> guis = new ArrayList<GuiTexture>();
+	public ArrayList<GuiTexture> guis = new ArrayList<GuiTexture>();
 	public GuiRenderer guiRenderer;
 	public Terrain terrain;
 	public TexturedModel tree;
@@ -46,7 +53,9 @@ public class GameScreen implements Screen{
 	public TexturedModel grass;
 	public TexturedModel flower;
 	public TexturedModel bobble;
-	Button b;
+	private Board board;
+	private ArrayList<Button> buttons = new ArrayList<>();
+	private GameStateManager gameStateManager;
 	
 	public GameScreen() {
 		
@@ -57,24 +66,47 @@ public class GameScreen implements Screen{
 		light = new Light(new Vector3f(200, 200, -100), new Vector3f(1f, 1f, 1f), new Vector3f(0, 1, 0));
 		renderer = new MasterRenderer();
 		guiRenderer = new GuiRenderer(loader);
+		System.out.println("Screen Created");
 		initModels();
-		//genTerrain();
-		//GuiTexture health = new GuiTexture(loader.loadTexture("gui/health"), new Vector2f(-0.74f, 0.925f), new Vector2f(0.25f, 0.25f));
-		//guis.add(health);
-		b = new Button(loader.loadTexture("gui/health"), new Vector2f(640, 360), new Vector2f(0.20f, 0.25f), 0, 0);
-		
-		guis.add(b);
+		ModelData m = OBJFileLoader.loadOBJ("Board2");
+		RawModel r = loader.loadToVAO(m.getVertices(), m.getTextureCoords(), m.getNormals(), m.getIndices());
+		TexturedModel boardModel = new TexturedModel(r, new ModelTexture(loader.loadTexture("gui/BoardTexture")));
+		board = new Board(boardModel, new Vector3f(400, 1, -400), 0, 0, 0, 20);
+		entities.add(board);
+		players.add(new Player("Player1", 0, "Knight", "white"));
+		players.add(new Player("Player2", 1, "King", "white"));
+		int i = 0;
+		for (Player p : players) {
+			p.init(loader, new Vector3f(board.startTile.x, board.startTile.y, board.startTile.z  + (i * 20)));
+			entities.add(p.getPlayerPiece());
+			i++;
+		}
+		players.get(0).movePieceTo(new Vector3f(325, players.get(0).getPlayerPiece().getPosition().y, players.get(0).getPlayerPiece().getPosition().z), 2);
+		camera = new Camera();
+		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players);
+		Button nextTurn = new Button(loader.loadTexture("gui/EndTurnButton"), new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65);
+		nextTurn.setActionMessage("Next Turn");
+		buttons.add(nextTurn);
+		guis.add(nextTurn);
 	}
+	
+	
 	
 	@Override
 	public void render() {
-		camera.move();
+		gameStateManager.render();
+		//camera.move();
 		renderer.processTerrain(terrain);
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);
 		}
-		b.render();
-//		c.render(dragon);
+		for (Player player : players) {
+			player.render();
+		}
+		for (Button button : buttons) {
+			button.render(this);
+		}
+			
 		renderer.render(light, camera);
 		guiRenderer.render(guis);
 	}
@@ -87,7 +119,7 @@ public class GameScreen implements Screen{
 				TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
 
 				TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-				TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+				TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap1"));
 
 				terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap2");
 
@@ -111,8 +143,6 @@ public class GameScreen implements Screen{
 				flower.getTexture().setHasTransparency(true);
 				flower.getTexture().setUseFakeLighting(true);
 				fern.getTexture().setHasTransparency(true);
-				
-				camera = new Camera();
 				
 //				RawModel dragonModel = OBJLoader.loadObjModel("Catapult/Catapult_Animation_000001", loader);
 //				TexturedModel dragonTex = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
@@ -166,6 +196,14 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void close() {
+	}
+
+	@Override
+	public void action(String action) {
+		System.out.println(action);
+		if (action == "Next Turn") {
+			gameStateManager.changeCurrentPlayer();
+		}
 	}
 
 	

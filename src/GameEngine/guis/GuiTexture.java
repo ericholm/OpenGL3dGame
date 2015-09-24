@@ -16,7 +16,7 @@ public class GuiTexture {
 		this.glPosition = new Vector2f((position.x / 640) - 1, (position.y / 360) - 1);
 		this.position = position;
 		this.scale = scale;
-		width = GL11.glGetTexLevelParameteri(texture, 0, GL11.GL_TEXTURE_WIDTH);
+		//width = GL11.glGetTexLevelParameteri(texture, 0, GL11.GL_TEXTURE_WIDTH);
 		//height = GL11.glGetTexLevelParameteri(texture, 0, GL11.GL_TEXTURE_HEIGHT);
 		this.width = width;
 		this.height = height;

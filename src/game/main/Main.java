@@ -8,7 +8,8 @@ public class Main extends Game{
 	
 	public Main() {
 		super();
-		this.setScreen(new StartScreen());
+		//this.setScreen(new StartScreen(this));
+		this.setScreen(new GameScreen());
 	}
 	
 	public static void main(String[] args) {

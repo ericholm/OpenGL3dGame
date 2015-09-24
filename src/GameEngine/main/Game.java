@@ -10,6 +10,7 @@ public class Game implements Runnable{
 	private Screen screen;
 	private Boolean debug = true;
 	private Thread thread;
+	private boolean initialised = false;
 	
 	public Game() {
 		thread = new Thread(this);
@@ -33,10 +34,14 @@ public class Game implements Runnable{
 			System.out.println("Init");
 		}
 		DisplayManager.createDisplay();
+		initialised = true;
 	}
 	
 	public void setScreen(Screen screen) {
 		this.screen = screen;
+		if (initialised) {
+			screen.create();
+		}
 	}
 	
 	public void close() {
