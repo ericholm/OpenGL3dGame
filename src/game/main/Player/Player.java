@@ -34,13 +34,13 @@ public class Player {
 		RawModel r = OBJLoader.loadObjModel(modelName, loader);
 		TexturedModel m = new TexturedModel(r, new ModelTexture(loader.loadTexture(textureName)));
 		if (modelName == "King") {
-			startPos.y = startPos.y - 3.8f;
-			startPos.x = startPos.x + 14;
+			//startPos.y = startPos.y - 3.8f;
+			//startPos.x = startPos.x + 14;
 			//startRotation = 0;
 		}
 		if (modelName == "Knight") {
-			startPos.y = startPos.y - 6.5f;
-			startPos.z = startPos.z + 3;
+			//startPos.y = startPos.y - 6.5f;
+			//startPos.z = startPos.z + 3;
 			//startRotation = -90;
 		}
 		playerPiece = new Entity(m, startPos, 0, 0, 0, 3f);

@@ -81,7 +81,7 @@ public class GameScreen implements Screen, ButtonAction {
 			entities.add(p.getPlayerPiece());
 			i++;
 		}
-		players.get(0).movePieceTo(new Vector3f(325, players.get(0).getPlayerPiece().getPosition().y, players.get(0).getPlayerPiece().getPosition().z), 2);
+		//players.get(0).movePieceTo(new Vector3f(325, players.get(0).getPlayerPiece().getPosition().y, players.get(0).getPlayerPiece().getPosition().z), 2);
 		camera = new Camera();
 		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players);
 		Button nextTurn = new Button(loader.loadTexture("gui/EndTurnButton"), new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65);
@@ -95,7 +95,7 @@ public class GameScreen implements Screen, ButtonAction {
 	@Override
 	public void render() {
 		gameStateManager.render();
-		//camera.move();
+		camera.move();
 		renderer.processTerrain(terrain);
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);

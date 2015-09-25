@@ -10,11 +10,11 @@ import game.main.Player.Player;
 public class Camera {
 	
 	private Player currentPlayerTracking;
-	private float distanceFromPlayer = 120;
+	private float distanceFromPlayer = 125;
 	private float angleAroundPlayer = 0;
 
 	private Vector3f position = new Vector3f(400, 50, -200);
-	private float pitch = 30;
+	private float pitch = 33;
 	private float yaw = 0;
 	private float roll;
 	private float speed = 0.5f;

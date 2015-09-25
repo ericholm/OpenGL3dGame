@@ -33,8 +33,7 @@ public class GameStateManager {
 	
 	public void render() {
 		if (currentState == GameStates.PlayersTurn) {
-			camera.render();
-			
+			//camera.render();
 		}
 		else if (currentState == GameStates.Attack) {
 			
