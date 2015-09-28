@@ -1,9 +1,9 @@
 package game.main.Screens;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -11,11 +11,13 @@ import GameEngine.entities.Animation;
 import GameEngine.entities.Camera;
 import GameEngine.entities.Entity;
 import GameEngine.entities.Light;
+import GameEngine.font.FontLoader;
 import GameEngine.guis.GuiRenderer;
 import GameEngine.guis.GuiTexture;
 import GameEngine.guis.components.Button;
 import GameEngine.guis.components.ButtonAction;
-import GameEngine.main.Game;
+import GameEngine.guis.components.TextButton;
+import GameEngine.guis.components.TextField;
 import GameEngine.main.Screen;
 import GameEngine.models.ModelData;
 import GameEngine.models.RawModel;
@@ -30,6 +32,7 @@ import GameEngine.textures.TerrainTexture;
 import GameEngine.textures.TerrainTexturePack;
 import game.main.Managers.GameStateManager;
 import game.main.Managers.GameStates;
+import game.main.Managers.QuestionHandler;
 import game.main.Player.Player;
 import game.main.board.Board;
 
@@ -37,6 +40,8 @@ public class GameScreen implements Screen, ButtonAction {
 	
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	public ArrayList<Player> players = new ArrayList<Player>();
+	public ArrayList<GuiTexture> guisFont = new ArrayList<GuiTexture>();
+	public ArrayList<GuiTexture> questionGui = new ArrayList<GuiTexture>();
 	public Animation c;
 	public Entity dragon;
 	//public List<Light> lights = new ArrayList<Light>();
@@ -56,6 +61,7 @@ public class GameScreen implements Screen, ButtonAction {
 	private Board board;
 	private ArrayList<Button> buttons = new ArrayList<>();
 	private GameStateManager gameStateManager;
+	private TextField t;
 	
 	public GameScreen() {
 		
@@ -81,19 +87,30 @@ public class GameScreen implements Screen, ButtonAction {
 			entities.add(p.getPlayerPiece());
 			i++;
 		}
-		//players.get(0).movePieceTo(new Vector3f(325, players.get(0).getPlayerPiece().getPosition().y, players.get(0).getPlayerPiece().getPosition().z), 2);
 		camera = new Camera();
 		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players);
 		Button nextTurn = new Button(loader.loadTexture("gui/EndTurnButton"), new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65);
 		nextTurn.setActionMessage("Next Turn");
 		buttons.add(nextTurn);
 		guis.add(nextTurn);
+		t = new TextField(loader.loadTexture("gui/EndTurnButton"), new Vector2f(500, 50), new Vector2f(0.12f, 0.09f), 151, 65);
+		guis.add(t);
+		FontLoader.loadFont("FontLookUp.txt", loader);
+		FontLoader.addGame(this);
+		QuestionHandler.setGame(this);
+		QuestionHandler.loadQuestions("Questions1");
+		QuestionHandler.getRandomQuestion();
+		//String temp = "a herarchcal system of relatonshps and oblgatons.";
+		//guis.add(new TextButton(loader.loadTexture("gui/TextField"), new Vector2f(500, 300), new Vector2f(0.48f, 0.12f), 453, 85, temp, 0.03f));
 	}
 	
 	
 	
 	@Override
 	public void render() {
+		if (Mouse.isButtonDown(0)) {
+			System.out.println(Mouse.getX() + ":" + Mouse.getY());
+		}
 		gameStateManager.render();
 		camera.move();
 		renderer.processTerrain(terrain);
@@ -106,9 +123,11 @@ public class GameScreen implements Screen, ButtonAction {
 		for (Button button : buttons) {
 			button.render(this);
 		}
-			
+		t.render();	
 		renderer.render(light, camera);
 		guiRenderer.render(guis);
+		guiRenderer.render(questionGui);
+		guiRenderer.render(guisFont);
 	}
 	
 	public void initModels() {
@@ -117,27 +136,19 @@ public class GameScreen implements Screen, ButtonAction {
 				TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
 				TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("pinkFlowers"));
 				TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
-
 				TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 				TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap1"));
-
 				terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap2");
-
 				// *****************************************
-
 				RawModel model = OBJLoader.loadObjModel("tree", loader);
-				
 				tree = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
 				grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader), new ModelTexture(loader.loadTexture("grassTexture")));
 				flower = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader), new ModelTexture(loader.loadTexture("flower")));
-
 				ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern"));
 				fernTexture.setNumberOfRows(2);
 				fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader), fernTexture);
-
 				bobble = new TexturedModel(OBJLoader.loadObjModel("lowPolyTree", loader), new ModelTexture(loader.loadTexture("lowPolyTree")));
 				TexturedModel lamp = new TexturedModel(OBJLoader.loadObjModel("lamp", loader), new ModelTexture(loader.loadTexture("lamp")));
-
 				grass.getTexture().setHasTransparency(true);
 				grass.getTexture().setUseFakeLighting(true);
 				flower.getTexture().setHasTransparency(true);
@@ -149,8 +160,6 @@ public class GameScreen implements Screen, ButtonAction {
 //				dragon = new Entity(dragonTex, new Vector3f(150, 40, -275), 0, 0, 0, 0.1f);
 //				entities.add(dragon);
 //				c = new Animation("Catapult/Catapult_Animation", 30, loader, "white");
-				
-				
 				for (Player player : players) {
 					player.init(loader, new Vector3f(50, 50, 50));
 				}

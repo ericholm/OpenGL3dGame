@@ -19,5 +19,13 @@ public class Question {
 	public String getQuestion() {
 		return question;
 	}
+	
+	public ArrayList<String> getPossiblwAnswers() {
+		return possibleAnswers;
+	}
+	
+	public int getAnswerIndex() {
+		return answerIndex;
+	}
 
 }

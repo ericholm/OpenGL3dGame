@@ -3,7 +3,7 @@ package GameEngine.guis;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
-public class GuiTexture {
+public class GuiTexture implements Cloneable{
 
 	private int texture;
 	private Vector2f glPosition;
@@ -22,9 +22,23 @@ public class GuiTexture {
 		this.height = height;
 	}
 	
+	public void setPosition(Vector2f pos) {
+		this.position = pos;
+		this.glPosition = new Vector2f((position.x / 640) - 1, (position.y / 360) - 1);
+	}
+	
+	public void setScale(Vector2f scale) {
+		this.scale = scale;
+	}
+	
 	public Vector2f getGlPositon() {
 		return glPosition;
 	}
+	
+	@Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 	public int getTexture() {
 		return texture;
