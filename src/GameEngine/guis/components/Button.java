@@ -26,7 +26,7 @@ public class Button extends GuiTexture{
 		if (Mouse.isButtonDown(0) && !isButtonPressedLastFrame) {
 			//System.out.println("Mouse DOwn");
 			isButtonPressedLastFrame = true;
-			System.out.println(Mouse.getX() + ":" + Mouse.getY());
+			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
 			//System.out.println(this.getPosition().x + ":" + this.getPosition().y);
 			//System.out.println(this.getWidth() + ":" + this.getHeight());
 			if (Mouse.getX() >= this.getPosition().x - (this.getWidth() / 2) && Mouse.getX() <= this.getPosition().x + (this.getWidth() / 2) &&

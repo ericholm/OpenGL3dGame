@@ -184,6 +184,45 @@ public class FontLoader {
 		}
 	}
 	
+	public static void drawString(String text, int x, int y, float scale, boolean questionQui) {
+		if (questionQui) {
+			text = text.toUpperCase();
+			scaleFactor = 0.1f / scale;
+			newLineOffset = 94 / scaleFactor;
+			float offset = 0;
+			for (int i = 0; i < text.length(); i++) {
+				String currentChar = String.valueOf(text.charAt(i));
+				if (!fontTextures.keySet().contains(currentChar)) {
+					offset += (50 / scaleFactor);
+				}
+				else if (currentChar == "I") {
+					System.out.println("FFF");
+					offset -= 20;
+				}
+				else {
+					try {
+						FontTexture f = (FontTexture) fontTextures.get(String.valueOf(currentChar)).clone();
+						f.getTexture().setPosition(new Vector2f(500,500));
+						GuiTexture character = f.getTexture();
+						character.setPosition(new Vector2f(x + offset - f.getWidth() / 2, y));
+						character.setScale(new Vector2f(scale, scale));
+						offset += ((gridSize / scaleFactor) - fontTextures.get(String.valueOf(currentChar)).getWidth() / scaleFactor) + (xOffset / scaleFactor);
+						//System.out.println(offset);
+						game.questionGui.add((GuiTexture) character.clone());
+						
+						character = null;
+						f = null;
+					} catch (CloneNotSupportedException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				
+			}
+		}
+		
+	}
+	
 	public static void clearText() {
 		game.guisFont.clear();
 	}

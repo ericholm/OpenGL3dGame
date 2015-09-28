@@ -16,12 +16,14 @@ import GameEngine.guis.GuiRenderer;
 import GameEngine.guis.GuiTexture;
 import GameEngine.guis.components.Button;
 import GameEngine.guis.components.ButtonAction;
+import GameEngine.guis.components.Dialog;
 import GameEngine.guis.components.TextButton;
 import GameEngine.guis.components.TextField;
 import GameEngine.main.Screen;
 import GameEngine.models.ModelData;
 import GameEngine.models.RawModel;
 import GameEngine.models.TexturedModel;
+import GameEngine.renderEngine.DisplayManager;
 import GameEngine.renderEngine.Loader;
 import GameEngine.renderEngine.MasterRenderer;
 import GameEngine.renderEngine.OBJFileLoader;
@@ -59,7 +61,8 @@ public class GameScreen implements Screen, ButtonAction {
 	public TexturedModel flower;
 	public TexturedModel bobble;
 	private Board board;
-	private ArrayList<Button> buttons = new ArrayList<>();
+	public ArrayList<Button> buttons = new ArrayList<>();
+	public ArrayList<Button> questionButtons = new ArrayList<>();
 	private GameStateManager gameStateManager;
 	private TextField t;
 	
@@ -100,16 +103,15 @@ public class GameScreen implements Screen, ButtonAction {
 		QuestionHandler.setGame(this);
 		QuestionHandler.loadQuestions("Questions1");
 		QuestionHandler.getRandomQuestion();
-		//String temp = "a herarchcal system of relatonshps and oblgatons.";
-		//guis.add(new TextButton(loader.loadTexture("gui/TextField"), new Vector2f(500, 300), new Vector2f(0.48f, 0.12f), 453, 85, temp, 0.03f));
 	}
 	
 	
 	
 	@Override
 	public void render() {
+		//System.out.println("FPS: " + (60 / DisplayManager.getFrameTimeSeconds()));
 		if (Mouse.isButtonDown(0)) {
-			System.out.println(Mouse.getX() + ":" + Mouse.getY());
+			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
 		}
 		gameStateManager.render();
 		camera.move();
@@ -122,6 +124,9 @@ public class GameScreen implements Screen, ButtonAction {
 		}
 		for (Button button : buttons) {
 			button.render(this);
+		}
+		for (int i = 0; i < questionButtons.size(); i++) {
+			questionButtons.get(i).render(this);
 		}
 		t.render();	
 		renderer.render(light, camera);
@@ -210,8 +215,16 @@ public class GameScreen implements Screen, ButtonAction {
 	@Override
 	public void action(String action) {
 		System.out.println(action);
-		if (action == "Next Turn") {
-			gameStateManager.changeCurrentPlayer();
+		if (action != null) {
+			if (action == "Next Turn") {
+				gameStateManager.changeCurrentPlayer();
+			}
+			if (action.startsWith("Answer ")) {
+				System.out.println(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));
+			}
+			if (action == "CloseQuestionGui") {
+				QuestionHandler.clearQuestion();
+			}
 		}
 	}
 

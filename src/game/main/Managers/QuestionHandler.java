@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import GameEngine.font.FontLoader;
 import GameEngine.guis.GuiTexture;
+import GameEngine.guis.components.Dialog;
 import GameEngine.guis.components.TextButton;
 import game.main.Screens.GameScreen;
 
@@ -26,7 +27,7 @@ public class QuestionHandler {
 	private static GameScreen game;
 	private static GuiTexture questionBackground;
 	private static float questionFontScale = 0.03f;
-	private static int charactersPerLine = (int) (8 * (0.1f / questionFontScale));
+	private static int charactersPerLine = (int) (9 * (0.1f / questionFontScale));
 	private static int currentQuestionsAnswer;
 	
 	public static void loadQuestions(String fileName) {
@@ -57,7 +58,7 @@ public class QuestionHandler {
 	
 	public static void setGame(GameScreen screen) {
 		game = screen;
-		questionBackground = new GuiTexture(game.loader.loadTexture("gui/QuestionTemplate"), new Vector2f(640,360), new Vector2f(0.5f,0.65f), 0, 0);
+		questionBackground = new GuiTexture(game.loader.loadTexture("gui/QuestionTemplate"), new Vector2f(640,360), new Vector2f(0.6f,0.75f), 0, 0);
 	}
 	
 	public static void getRandomQuestion() {
@@ -70,7 +71,7 @@ public class QuestionHandler {
 		currentQuestionsAnswer = question.getAnswerIndex();
 		game.questionGui.add(questionBackground);
 		String text = question.getQuestion();
-		FontLoader.drawString("Question", 420,(int) 560, 0.05f);
+		FontLoader.drawString("Question", 360,(int) 580, 0.05f, true);
 //		System.out.println(text);
 //		int lines = (int) Math.ceil(((double)text.length() / (double) charactersPerLine));
 //		System.out.println(lines);
@@ -109,30 +110,33 @@ public class QuestionHandler {
 		}
 		int i = 0;
 		for (String line : lines) {
-			FontLoader.drawString(line, 400,(int) 540 - 20 - (int)(FontLoader.newLineOffset * i), questionFontScale);
+			FontLoader.drawString(line, 360,(int) 565 - 20 - (int)(FontLoader.newLineOffset * i), questionFontScale, true);
 			i++;
 		}
 		
-		FontLoader.drawString("Answers", 420,(int) 370, 0.05f);
+		FontLoader.drawString("Answers", 360,(int) 390, 0.05f, true);
 		int answerId = 0;
 		for (String answer : question.getPossiblwAnswers()) {
 			TextButton answerButton = new TextButton(game.loader.loadTexture("gui/TextField"), new Vector2f(600, 300 - (answerId * 85) + 15),
-					new Vector2f(0.48f, 0.10f), 453, 85, answer, 0.03f);
-			game.questionGui.add(answerButton);
+					new Vector2f(0.48f, 0.10f), 614, 70, answer, 0.03f, true, game);
 			answerButton.setActionMessage("Answer " + answerId);
 			answerId++;
 		}
 	}
 	
-	public boolean checkAnswer(int answer) {
+	public static boolean checkAnswer(int answer) {
+		clearQuestion();
 		if (answer == currentQuestionsAnswer) {
+			Dialog d = new Dialog(game, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Correct", "You  won 200 gold", " OK", 0.03f, 0.05f);
 			return true;
 		}
+		Dialog d = new Dialog(game, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Incorrect", "The correct answer is " + currentQuestionsAnswer, " OK", 0.03f, 0.05f);
 		return false;
 	}
 	
 	public static void clearQuestion() {
 		game.questionGui.clear();
+		game.questionButtons.clear();
 	}
 
 }
