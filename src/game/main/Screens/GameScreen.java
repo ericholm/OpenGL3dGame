@@ -64,7 +64,7 @@ public class GameScreen implements Screen, ButtonAction {
 	public ArrayList<Button> buttons = new ArrayList<>();
 	public ArrayList<Button> questionButtons = new ArrayList<>();
 	private GameStateManager gameStateManager;
-	private TextField t;
+	private Boolean down = false;
 	
 	public GameScreen() {
 		
@@ -82,27 +82,37 @@ public class GameScreen implements Screen, ButtonAction {
 		TexturedModel boardModel = new TexturedModel(r, new ModelTexture(loader.loadTexture("gui/BoardTexture")));
 		board = new Board(boardModel, new Vector3f(400, 1, -400), 0, 0, 0, 20);
 		entities.add(board);
-		players.add(new Player("Player1", 0, "Knight", "white"));
-		players.add(new Player("Player2", 1, "King", "white"));
+		players.add(new Player("Player1", 0, "Knight", "white", board));
+		//players.add(new Player("Player2", 1, "King", "white", board));
 		int i = 0;
 		for (Player p : players) {
-			p.init(loader, new Vector3f(board.startTile.x, board.startTile.y, board.startTile.z  + (i * 20)));
+			//p.init(loader, new Vector3f(board.startTile.x, board.startTile.y, board.startTile.z  + (i * 20)));
+			p.init(loader, new Vector3f(board.tiles.get(0).position.x, board.tiles.get(0).position.y, board.tiles.get(0).position.z), Float.valueOf(i * 20));
 			entities.add(p.getPlayerPiece());
+			
+			//p.movePieceToTile(3, board.tiles, 0.2f);
 			i++;
 		}
+		players.get(0).movePieceToTile(14, board.tiles, 0.2f);
+		//players.get(0).movePieceToTile(3, board.tiles, 0.2f);
+		//players.get(0).movePieceTo(new Vector3f(483f, players.get(0).getPlayerPiece().getPosition().y, players.get(0).getPlayerPiece().getPosition().z), 1);
+		//players.get(0).movePieceTo(board.tiles.get(3).position, 1);
+		System.out.println(board.tiles.get(1).position);
 		camera = new Camera();
-		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players);
+		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players, board);
 		Button nextTurn = new Button(loader.loadTexture("gui/EndTurnButton"), new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65);
 		nextTurn.setActionMessage("Next Turn");
 		buttons.add(nextTurn);
 		guis.add(nextTurn);
-		t = new TextField(loader.loadTexture("gui/EndTurnButton"), new Vector2f(500, 50), new Vector2f(0.12f, 0.09f), 151, 65);
-		guis.add(t);
 		FontLoader.loadFont("FontLookUp.txt", loader);
 		FontLoader.addGame(this);
 		QuestionHandler.setGame(this);
 		QuestionHandler.loadQuestions("Questions1");
-		QuestionHandler.getRandomQuestion();
+		TextButton rollDice = new TextButton(loader.loadTexture("gui/TextField"), new Vector2f(1180, 150), new Vector2f(0.12f, 0.09f), 151, 65, "Roll", 0.04f);
+		rollDice.setActionMessage("RollDice");
+		buttons.add(rollDice);
+		guis.add(rollDice);
+		//QuestionHandler.getRandomQuestion();
 	}
 	
 	
@@ -110,11 +120,14 @@ public class GameScreen implements Screen, ButtonAction {
 	@Override
 	public void render() {
 		//System.out.println("FPS: " + (60 / DisplayManager.getFrameTimeSeconds()));
-		if (Mouse.isButtonDown(0)) {
+		if (Mouse.isButtonDown(0) && !down) {
+			down = true;
+			players.get(0).movePieceToTile(3, board.tiles, 0.2f);
 			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
 		}
 		gameStateManager.render();
 		camera.move();
+		//camera.render();
 		renderer.processTerrain(terrain);
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);
@@ -128,7 +141,6 @@ public class GameScreen implements Screen, ButtonAction {
 		for (int i = 0; i < questionButtons.size(); i++) {
 			questionButtons.get(i).render(this);
 		}
-		t.render();	
 		renderer.render(light, camera);
 		guiRenderer.render(guis);
 		guiRenderer.render(questionGui);
@@ -165,9 +177,9 @@ public class GameScreen implements Screen, ButtonAction {
 //				dragon = new Entity(dragonTex, new Vector3f(150, 40, -275), 0, 0, 0, 0.1f);
 //				entities.add(dragon);
 //				c = new Animation("Catapult/Catapult_Animation", 30, loader, "white");
-				for (Player player : players) {
-					player.init(loader, new Vector3f(50, 50, 50));
-				}
+//				for (Player player : players) {
+//					player.init(loader, new Vector3f(50, 50, 50));
+//				}
 				
 	}
 	
@@ -224,6 +236,9 @@ public class GameScreen implements Screen, ButtonAction {
 			}
 			if (action == "CloseQuestionGui") {
 				QuestionHandler.clearQuestion();
+			}
+			if (action == "RollDice") {
+				gameStateManager.rollDice();
 			}
 		}
 	}

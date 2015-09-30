@@ -11,10 +11,12 @@ public class Dice {
 	public Dice(int minRoll, int maxRoll) {
 		this.maxRoll = maxRoll;
 		this.minRoll = minRoll;
+		random = new Random();
+		//random = new 
 	}
 	
 	public int roll() {
-		return random.nextInt(maxRoll);
+		return random.nextInt(maxRoll - minRoll + 1) + minRoll;
 	}
 
 }
