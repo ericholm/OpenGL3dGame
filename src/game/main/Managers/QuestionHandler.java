@@ -18,7 +18,7 @@ import game.main.Screens.GameScreen;
 
 public class QuestionHandler {
 	
-	private static ArrayList<Question> questionsNotUsed = new ArrayList<>();
+	private static ArrayList<Question> questionsNotUsed = new ArrayList<Question>();
 	private static ArrayList<Question> questions = new ArrayList<Question>();
 	private static BufferedReader reader;
 	private static String QUESTION_LOC = "res/questions/";
@@ -41,7 +41,7 @@ public class QuestionHandler {
 					break;
 				}
 				String[] questionSplit = line.split(delimeter);
-				ArrayList<String> possibleAnswers = new ArrayList<>();
+				ArrayList<String> possibleAnswers = new ArrayList<String>();
 				for (int i = 1; i <= questionSplit.length - 2; i++) {
 					possibleAnswers.add(questionSplit[i]);
 				}
@@ -81,7 +81,7 @@ public class QuestionHandler {
 		int currentIndex = 0;
 		int chars = 0;
 		String[] words = text.split(" ");
-		ArrayList<String> lines = new ArrayList<>();
+		ArrayList<String> lines = new ArrayList<String>();
 		//System.out.println(charactersPerLine + ":" + text.length());
 		boolean first = true;
 		for (String word : words) {

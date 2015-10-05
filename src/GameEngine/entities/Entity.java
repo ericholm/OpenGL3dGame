@@ -10,6 +10,7 @@ public class Entity {
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
+	private Vector3f size = new Vector3f();
 
 	private int textureIndex = 0;
 
@@ -21,6 +22,14 @@ public class Entity {
 		this.rotY = rotY;
 		this.rotZ = rotZ;
 		this.scale = scale;
+		this.size.x = model.getSize().x * scale;
+		this.size.y = model.getSize().y * scale;
+		this.size.z = model.getSize().z * scale;
+		System.out.println(size);
+	}
+	
+	public Vector3f getSize() {
+		return size;
 	}
 
 	public Entity(TexturedModel model, int index, Vector3f position, float rotX, float rotY, float rotZ, float scale) {

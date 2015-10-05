@@ -13,11 +13,12 @@ import GameEngine.textures.ModelTexture;
 
 public class Animation {
 
-	private ArrayList<TexturedModel> models = new ArrayList<>();
+	private ArrayList<TexturedModel> models = new ArrayList<TexturedModel>();
 	private int totalFrames;
 	private int frame;
 	private int modelNo = 0;
 	private boolean playReverse = false;
+	private boolean isComplete = false;
 
 	public Animation(String baseFileName, int count, Loader loader, String texture) {
 		totalFrames = count;
@@ -33,6 +34,10 @@ public class Animation {
 			models.add(new TexturedModel(r, new ModelTexture(loader.loadTexture(texture))));
 		}
 	}
+	
+	public boolean isAnimationComplete() {
+		return isComplete;
+	}
 
 	public void render(Entity entity) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
@@ -44,7 +49,11 @@ public class Animation {
 			if (frame % 4 == 0) {
 				entity.setModel(models.get(modelNo));
 				modelNo++;
+				isComplete = false;
 			}
+		}
+		else {
+			isComplete = true;
 		}
 //		else {
 //			playReverse = true;

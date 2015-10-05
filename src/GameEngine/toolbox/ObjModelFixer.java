@@ -13,10 +13,10 @@ public class ObjModelFixer {
 	private static final String RES_LOC = "res/modelFix/";
 	private static final String G_RES_LOC = "res/modelFix/Group/";
 	private static BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-	private static ArrayList<String> vertices = new ArrayList<>();
-	private static ArrayList<String> normals = new ArrayList<>();
-	private static ArrayList<String> textures = new ArrayList<>();
-	private static ArrayList<String> faces = new ArrayList<>();
+	private static ArrayList<String> vertices = new ArrayList<String>();
+	private static ArrayList<String> normals = new ArrayList<String>();
+	private static ArrayList<String> textures = new ArrayList<String>();
+	private static ArrayList<String> faces = new ArrayList<String>();
 
 	public static void main(String[] args) {
 		

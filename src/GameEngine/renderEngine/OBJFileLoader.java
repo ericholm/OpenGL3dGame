@@ -17,6 +17,7 @@ import GameEngine.toolbox.Vertex;
 public class OBJFileLoader {
 	
 	private static final String RES_LOC = "res/models/";
+	private static int maxX, maxY, maxZ, minX, minY, minZ = 0;
 
 	public static ModelData loadOBJ(String objFileName) {
 		FileReader isr = null;
@@ -64,6 +65,26 @@ public class OBJFileLoader {
 					String[] vertex1 = currentLine[1].split("/");
 					String[] vertex2 = currentLine[2].split("/");
 					String[] vertex3 = currentLine[3].split("/");
+					
+					if (Integer.valueOf(vertex1[0]) > maxX) {
+						maxX = Integer.valueOf(vertex1[0]);
+					}
+					else if (Integer.valueOf(vertex1[0]) < minX) {
+						minX = Integer.valueOf(vertex1[0]);
+					}
+					else if (Integer.valueOf(vertex1[1]) > maxY) {
+						maxY = Integer.valueOf(vertex1[1]);
+					}
+					else if (Integer.valueOf(vertex1[1]) < minY) {
+						minY = Integer.valueOf(vertex1[1]);
+					}
+					else if (Integer.valueOf(vertex1[2]) > maxZ) {
+						maxZ = Integer.valueOf(vertex1[2]);
+					}
+					else if (Integer.valueOf(vertex1[2]) < minZ) {
+						minZ = Integer.valueOf(vertex1[2]);
+					}
+					
 					processVertex(vertex1, vertices, indices);
 					processVertex(vertex2, vertices, indices);
 					processVertex(vertex3, vertices, indices);
@@ -88,6 +109,7 @@ public class OBJFileLoader {
 		int[] indicesArray = convertIndicesListToArray(indices);
 		ModelData data = new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
 				furthest);
+		data.setSize(new Vector3f(maxX - minX, maxY - minY, maxZ - minZ));
 		return data;
 	}
 

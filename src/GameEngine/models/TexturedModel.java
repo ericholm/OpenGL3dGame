@@ -1,5 +1,7 @@
 package GameEngine.models;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import GameEngine.textures.ModelTexture;
 
 public class TexturedModel {
@@ -10,6 +12,10 @@ public class TexturedModel {
 	public TexturedModel(RawModel model, ModelTexture texture) {
 		this.rawModel = model;
 		this.texture = texture;
+	}
+	
+	public Vector3f getSize() {
+		return rawModel.getSize();
 	}
 
 	public RawModel getRawModel() {

@@ -13,6 +13,8 @@ import org.lwjgl.util.vector.Vector3f;
 import GameEngine.models.RawModel;
 
 public class OBJLoader {
+	
+	private static int maxX, maxY, maxZ, minX, minY, minZ = 0;
 
 	public static RawModel loadObjModel(String fileName, Loader loader) {
 		FileReader fr = null;
@@ -62,6 +64,25 @@ public class OBJLoader {
 				String[] vertex1 = currentLine[1].split("/");
 				String[] vertex2 = currentLine[2].split("/");
 				String[] vertex3 = currentLine[3].split("/");
+				
+				if (Integer.valueOf(vertex1[0]) > maxX) {
+					maxX = Integer.valueOf(vertex1[0]);
+				}
+				else if (Integer.valueOf(vertex1[0]) < minX) {
+					minX = Integer.valueOf(vertex1[0]);
+				}
+				else if (Integer.valueOf(vertex1[1]) > maxY) {
+					maxY = Integer.valueOf(vertex1[1]);
+				}
+				else if (Integer.valueOf(vertex1[1]) < minY) {
+					minY = Integer.valueOf(vertex1[1]);
+				}
+				else if (Integer.valueOf(vertex1[2]) > maxZ) {
+					maxZ = Integer.valueOf(vertex1[2]);
+				}
+				else if (Integer.valueOf(vertex1[2]) < minZ) {
+					minZ = Integer.valueOf(vertex1[2]);
+				}
 
 				processVertex(vertex1, indices, textures, normals, textureArray, normalsArray);
 				processVertex(vertex2, indices, textures, normals, textureArray, normalsArray);
@@ -87,8 +108,9 @@ public class OBJLoader {
 		for (int i = 0; i < indices.size(); i++) {
 			indicesArray[i] = indices.get(i);
 		}
-		
-		return loader.loadToVAO(verticesArray, textureArray, normalsArray, indicesArray);
+		RawModel model = loader.loadToVAO(verticesArray, textureArray, normalsArray, indicesArray);
+		model.setSize(maxX - minX, maxY - minY, maxZ - minZ);
+		return model;
 
 	}
 

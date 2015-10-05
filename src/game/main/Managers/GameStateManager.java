@@ -12,7 +12,7 @@ public class GameStateManager {
 
 	private Player currentPlayersTurn;
 	private Camera camera;
-	private ArrayList<Player> players = new ArrayList<>();	
+	private ArrayList<Player> players = new ArrayList<Player>();	
 	private GameStates currentState;
 	private Board board;
 	private Dice dice;

@@ -61,8 +61,8 @@ public class GameScreen implements Screen, ButtonAction {
 	public TexturedModel flower;
 	public TexturedModel bobble;
 	private Board board;
-	public ArrayList<Button> buttons = new ArrayList<>();
-	public ArrayList<Button> questionButtons = new ArrayList<>();
+	public ArrayList<Button> buttons = new ArrayList<Button>();
+	public ArrayList<Button> questionButtons = new ArrayList<Button>();
 	private GameStateManager gameStateManager;
 	private Boolean down = false;
 	
@@ -79,6 +79,7 @@ public class GameScreen implements Screen, ButtonAction {
 		initModels();
 		ModelData m = OBJFileLoader.loadOBJ("Board2");
 		RawModel r = loader.loadToVAO(m.getVertices(), m.getTextureCoords(), m.getNormals(), m.getIndices());
+		r.setSize(m.getSize().x, m.getSize().y, m.getSize().z);
 		TexturedModel boardModel = new TexturedModel(r, new ModelTexture(loader.loadTexture("gui/BoardTexture")));
 		board = new Board(boardModel, new Vector3f(400, 1, -400), 0, 0, 0, 20);
 		entities.add(board);

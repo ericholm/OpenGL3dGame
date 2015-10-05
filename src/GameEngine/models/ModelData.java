@@ -1,5 +1,7 @@
 package GameEngine.models;
 
+import org.lwjgl.util.vector.Vector3f;
+
 public class ModelData {
 
 	private float[] vertices;
@@ -7,6 +9,7 @@ public class ModelData {
 	private float[] normals;
 	private int[] indices;
 	private float furthestPoint;
+	private Vector3f size = new Vector3f();
 
 	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices, float furthestPoint) {
 		this.vertices = vertices;
@@ -14,6 +17,14 @@ public class ModelData {
 		this.normals = normals;
 		this.indices = indices;
 		this.furthestPoint = furthestPoint;
+	}
+	
+	public void setSize(Vector3f size) {
+		this.size = size;
+	}
+	
+	public Vector3f getSize() {
+		return size;
 	}
 
 	public float[] getVertices() {

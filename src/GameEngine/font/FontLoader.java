@@ -23,8 +23,8 @@ import game.main.Screens.GameScreen;
 
 public class FontLoader {
 
-	private static Hashtable<String, FontTexture> fontTextures = new Hashtable<>();
-	public static ArrayList<FontTexture> t = new ArrayList<>();
+	private static Hashtable<String, FontTexture> fontTextures = new Hashtable<String, FontTexture>();
+	public static ArrayList<FontTexture> t = new ArrayList<FontTexture>();
 	private static final String fontLoc = "res/fonts/";
 	private static final int gridSize = 128;
 	private static GameScreen game;

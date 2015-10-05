@@ -30,7 +30,7 @@ public class StartScreen implements Screen, ButtonAction{
 	private SelectScreenButton kingPiece;
 	private SelectScreenButton queenPiece;
 	private String selectedPiece;
-	private ArrayList<Player> players = new ArrayList<>();
+	private ArrayList<Player> players = new ArrayList<Player>();
 	
 	public StartScreen(Main game) {
 		this.game = game;

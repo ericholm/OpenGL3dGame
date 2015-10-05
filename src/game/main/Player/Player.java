@@ -29,7 +29,7 @@ public class Player {
 	private Board board;
 	private float offset;
 	private int direction = 0;
-	private ArrayList<Vector3f> path = new ArrayList<>();
+	private ArrayList<Vector3f> path = new ArrayList<Vector3f>();
 	//private float startRotation;
 	Vector3f poss;
 
@@ -91,8 +91,8 @@ public class Player {
 		poss = pos;
 		currentTile++;
 		totalMovementTime = seconds;
-		System.out.println(pos);
-		System.out.println("Player: " + playerPiece.getPosition());
+		//System.out.println(pos);
+		//System.out.println("Player: " + playerPiece.getPosition());
 //		movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x) / seconds;
 //		movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
 //		movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z) / seconds;
