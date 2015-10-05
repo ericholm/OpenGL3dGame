@@ -16,6 +16,8 @@ public class GameStateManager {
 	private GameStates currentState;
 	private Board board;
 	private Dice dice;
+	private boolean processTile = false;
+	private float playerSpeed = 0.2f;
 
 	public GameStateManager(GameStates state, Player currentPlayersTurn, Camera camera, ArrayList<Player> players, Board board) {
 		currentState = state;
@@ -24,10 +26,11 @@ public class GameStateManager {
 		this.players = players;
 		camera.setPlayerToTrack(currentPlayersTurn);
 		this.board = board;
-		dice = new Dice(9, 10);
+		dice = new Dice(1, 3);
 	}
 
 	public void changeCurrentPlayer() {
+		processTile = false;
 		if (currentPlayersTurn.getPlayerId() == 0) {
 			currentPlayersTurn = players.get(1);
 			camera.setPlayerToTrack(currentPlayersTurn);
@@ -36,17 +39,17 @@ public class GameStateManager {
 			currentPlayersTurn = players.get(0);
 			camera.setPlayerToTrack(currentPlayersTurn);
 		}
+		currentPlayersTurn.canMove = true;
 	}
 
 	public void movePlayer(int tiles) {
 		//System.out.println(tiles);
 		int tileIndex = currentPlayersTurn.getCurrentTileIndex() + tiles;
 		if (tileIndex >= 16) {
-			tileIndex -= 15;
+			tileIndex -= 16;
 		}
-		processTileType(board.tiles.get(tileIndex).getTileType(), tiles, currentPlayersTurn.getCurrentTileIndex());
-		System.out.println(tileIndex);
-		currentPlayersTurn.movePieceToTile(tileIndex, board.tiles, 0.2f);
+		//System.out.println(tileIndex);
+		currentPlayersTurn.movePieceToTile(tileIndex, board.tiles, playerSpeed);
 	}
 
 	public void processTileType(TileType tile, int tilesMove, int currentTile) {
@@ -58,6 +61,7 @@ public class GameStateManager {
 		}
 		else if(tile == TileType.Question) {
 			System.out.println("You landed on question");
+			QuestionHandler.getRandomQuestion();
 		}
 		else if(tile == TileType.SiegeFactory) {
 			System.out.println("You landed on siege factory");
@@ -71,12 +75,18 @@ public class GameStateManager {
 	}
 	
 	public void rollDice() {
-		movePlayer(dice.roll());
+		if (currentPlayersTurn.canMove) {
+			movePlayer(dice.roll());
+			//currentPlayersTurn.canMove = false;
+		}
 	}
 
 	public void render() {
 		if (currentState == GameStates.PlayersTurn) {
-			//camera.render();
+			camera.render(currentPlayersTurn.getDirection());
+			if (!currentPlayersTurn.isMoving() && !processTile) {
+				processTile = true;
+			}
 		}
 		else if (currentState == GameStates.Attack) {
 

@@ -84,7 +84,7 @@ public class GameScreen implements Screen, ButtonAction {
 		board = new Board(boardModel, new Vector3f(400, 1, -400), 0, 0, 0, 20);
 		entities.add(board);
 		players.add(new Player("Player1", 0, "Knight", "white", board));
-		//players.add(new Player("Player2", 1, "King", "white", board));
+		players.add(new Player("Player2", 1, "King", "white", board));
 		int i = 0;
 		for (Player p : players) {
 			//p.init(loader, new Vector3f(board.startTile.x, board.startTile.y, board.startTile.z  + (i * 20)));
@@ -94,22 +94,25 @@ public class GameScreen implements Screen, ButtonAction {
 			//p.movePieceToTile(3, board.tiles, 0.2f);
 			i++;
 		}
-		players.get(0).movePieceToTile(14, board.tiles, 0.2f);
-		//players.get(0).movePieceToTile(3, board.tiles, 0.2f);
-		//players.get(0).movePieceTo(new Vector3f(483f, players.get(0).getPlayerPiece().getPosition().y, players.get(0).getPlayerPiece().getPosition().z), 1);
-		//players.get(0).movePieceTo(board.tiles.get(3).position, 1);
 		System.out.println(board.tiles.get(1).position);
 		camera = new Camera();
 		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players, board);
-		Button nextTurn = new Button(loader.loadTexture("gui/EndTurnButton"), new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65);
-		nextTurn.setActionMessage("Next Turn");
-		buttons.add(nextTurn);
-		guis.add(nextTurn);
+		ArrayList<Integer> t = new ArrayList<Integer>();
+		t.add(loader.loadTexture("gui/TextField"));
+		t.add(loader.loadTexture("gui/TextField-hover"));
+		//Button nextTurn = new Button(loader.loadTexture("gui/EndTurnButton"), new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65);
+		
 		FontLoader.loadFont("FontLookUp.txt", loader);
 		FontLoader.addGame(this);
 		QuestionHandler.setGame(this);
 		QuestionHandler.loadQuestions("Questions1");
-		TextButton rollDice = new TextButton(loader.loadTexture("gui/TextField"), new Vector2f(1180, 150), new Vector2f(0.12f, 0.09f), 151, 65, "Roll", 0.04f);
+		
+		TextButton nextTurn = new TextButton(t, new Vector2f(1180, 50), new Vector2f(0.12f, 0.09f), 151, 65, "End", 0.04f);
+		nextTurn.setActionMessage("Next Turn");
+		buttons.add(nextTurn);
+		guis.add(nextTurn);
+		
+		TextButton rollDice = new TextButton(t, new Vector2f(1180, 150), new Vector2f(0.12f, 0.09f), 151, 65, "Roll", 0.04f);
 		rollDice.setActionMessage("RollDice");
 		buttons.add(rollDice);
 		guis.add(rollDice);
@@ -120,14 +123,10 @@ public class GameScreen implements Screen, ButtonAction {
 	
 	@Override
 	public void render() {
+		
 		//System.out.println("FPS: " + (60 / DisplayManager.getFrameTimeSeconds()));
-		if (Mouse.isButtonDown(0) && !down) {
-			down = true;
-			players.get(0).movePieceToTile(3, board.tiles, 0.2f);
-			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
-		}
 		gameStateManager.render();
-		camera.move();
+		//camera.move();
 		//camera.render();
 		renderer.processTerrain(terrain);
 		for (Entity entity : entities) {
