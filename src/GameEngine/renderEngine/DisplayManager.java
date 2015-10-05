@@ -2,6 +2,7 @@ package GameEngine.renderEngine;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -13,6 +14,7 @@ public class DisplayManager {
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final int FPS_CAP = 120;
+	private static boolean toggle = false;
 
 	private static final String TITLE = "3D Game Engine - ThinMatrix tutorial";
 
@@ -36,8 +38,18 @@ public class DisplayManager {
 	}
 
 	public static void updateDisplay() {
-
-		Display.sync(FPS_CAP);
+		if (Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
+			toggle = true;
+		}
+		else {
+			toggle = false;
+		}
+		if (toggle) {
+			Display.sync(20);
+		}
+		else {
+			Display.sync(FPS_CAP);
+		}
 		Display.update();
 		long currentFrameTime = getCurrentTime();
 		delta = (currentFrameTime - lastFrameTime) / 1000f;

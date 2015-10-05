@@ -1,40 +1,132 @@
 package GameEngine.entities;
 
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import GameEngine.renderEngine.DisplayManager;
 import game.main.Player.Player;
 
 public class Camera {
-	
+
 	private Player currentPlayerTracking;
 	private float distanceFromPlayer = 125;
 	private float angleAroundPlayer = 0;
+	private float rotationTime = 0.2f;
+	private float yawTransform = 0;
+	private float transformX = 0;
+	private float transformY = 0;
+	private ArrayList<Vector3f> turnPoint = new ArrayList<Vector3f>();
+	private float yawTransformPerSecond;
+	private int directionLastFrame = 0;
+	private int numberPoints = 30;
 
 	private Vector3f position = new Vector3f(400, 50, -200);
 	private float pitch = 33;
 	private float yaw = 0;
 	private float roll;
-	private float speed = 0.5f;
-
+	//private float speed = 0.5f;
+	private boolean animate = false;
+	private int speed = 2;
+	
+	private float time = 0;
 	public Camera() {
 		//this.player = player;
 	}
-	
+
 	public void setPlayerToTrack(Player player) {
 		currentPlayerTracking = player;
 	}
-	
-	public void render() {
-		this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
-		this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
-		this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z + distanceFromPlayer;
+
+	public void render(int playerDirection) {
+		
+		time++;
+		
+		if (turnPoint.size() > 0) {
+			if (time % speed == 0) {
+				this.position = turnPoint.get(turnPoint.size() - 1);
+				turnPoint.remove(turnPoint.size() - 1);
+			}
+			yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
+		}
+		
+		if (yawTransformPerSecond != yaw) {
+			//yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
+		}
+		
+		else {
+			if (playerDirection == 0) {
+				if (playerDirection != directionLastFrame) {
+					for (int i = 0; i < numberPoints; i++) {
+
+					}
+				}
+				else {
+					pitch = 33;
+					
+					yawTransform = 0;
+					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
+					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
+					this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z + distanceFromPlayer;
+				}
+			}
+			else if (playerDirection == 1) {
+				if (playerDirection != directionLastFrame) {
+					for (int i = 0; i <= numberPoints; i++) {
+						turnPoint.add(new Vector3f((float) ((currentPlayerTracking.getPlayerPiece().getPosition().x) - distanceFromPlayer * (Math.cos(Math.toRadians(90 / numberPoints) * i))), this.position.y,
+								(float) ((currentPlayerTracking.getPlayerPiece().getPosition().z) + (distanceFromPlayer * (Math.sin(Math.toRadians(90 / numberPoints) * i))))));
+						yawTransform = 90;
+					}
+				}
+				else {
+					pitch = 33;
+					yawTransform = 90;
+					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x - distanceFromPlayer;
+					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
+					this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z;
+				}
+			}
+			else if (playerDirection == 2) {
+				if (playerDirection != directionLastFrame) {
+
+				}
+				else {
+					pitch = 33;
+					yawTransform = 180;
+					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
+					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
+					this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z - distanceFromPlayer;
+				}
+			}
+			else if (playerDirection == 3) {
+				if (playerDirection != directionLastFrame) {
+
+				}
+				else {
+					pitch = 33;
+					yawTransform = 270;
+					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x + distanceFromPlayer;
+					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
+					this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z;
+				}
+			}
+		}
+
+
+
+		
+		yawTransformPerSecond = (yawTransform - yaw) / (120);
+		//System.out.println(yaw);
+		directionLastFrame = playerDirection;
 	}
 
 	public void move() {
-
+		//System.out.println("Yaw: " + yaw);
+		//System.out.println("Pitch: " + pitch);
 		//yaw = -(Display.getWidth() - Mouse.getX() / 2);
 		//pitch = (Display.getHeight() / 2) - Mouse.getY();
 		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {

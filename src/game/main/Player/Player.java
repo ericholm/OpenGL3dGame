@@ -29,7 +29,9 @@ public class Player {
 	private Board board;
 	private float offset;
 	private int direction = 0;
+	private int score = 0;
 	private ArrayList<Vector3f> path = new ArrayList<>();
+	public boolean canMove = true;
 	//private float startRotation;
 	Vector3f poss;
 
@@ -39,6 +41,14 @@ public class Player {
 		this.playerId = playerId;
 		this.modelName = modelName;
 		this.textureName = texureName;
+	}
+	
+	public int getDirection() {
+		return direction;
+	}
+	
+	public void increaseScore(int amount) {
+		score += amount;
 	}
 
 	public void init(Loader loader, Vector3f startPos, float offset) {
@@ -51,6 +61,10 @@ public class Player {
 	
 	public int getCurrentTileIndex() {
 		return currentTile;
+	}
+	
+	public boolean isMoving() {
+		return moveTo;
 	}
 
 
@@ -90,34 +104,39 @@ public class Player {
 	public void movePieceTo(Vector3f pos, float seconds) {
 		poss = pos;
 		currentTile++;
+		if (currentTile >= 16) {
+			currentTile = 0;
+		}
 		totalMovementTime = seconds;
-		System.out.println(pos);
-		System.out.println("Player: " + playerPiece.getPosition());
-//		movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x) / seconds;
-//		movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
-//		movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z) / seconds;
 		if (currentTile >= 0 && currentTile <= 3) {
+			//System.out.println("0 - 3");
+			direction = 0;
 			movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x) / seconds;
 			movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
 			movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z + offset) / seconds;
 		}
 		else if (currentTile >= 4 && currentTile <= 7) {
+			//System.out.println("4 - 7");
+			direction = 1;
 			movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x - offset) / seconds;
 			movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
 			movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z) / seconds;
 		}
 		else if (currentTile >= 8 && currentTile <= 11) {
+			//System.out.println("8 - 11");
+			direction = 2;
 			movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x) / seconds;
 			movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
 			movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z - offset) / seconds;
 		}
 		else if (currentTile >= 12 && currentTile <= 15) {
+			//System.out.println("12 - 15");
+			direction = 3;
 			movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x + offset) / seconds;
 			movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
 			movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z) / seconds;
 		}
 		moveTo = true;
-		//System.out.println(movementPerSecond);
 	}
 
 	//	public float timeTo(float speed, Vector3f startPos, Vector3f endPos) {
@@ -131,6 +150,7 @@ public class Player {
 	//	}
 	//	
 	public void movePieceToTile(int tileIndex, ArrayList<Tile> tiles, float seconds) {
+		//System.out.println(tileIndex);
 		if (currentTile >= tileIndex) {
 			for (int i = currentTile; i <= tiles.size() - 1; i++) {
 				path.add(tiles.get(i).position);
@@ -144,8 +164,6 @@ public class Player {
 				path.add(tiles.get(i).position);
 			}
 		}
-
-
 		totalMovementTime = seconds;
 		moveTo = true;
 	}
