@@ -88,6 +88,12 @@ public class GameStateManager {
 	public void render() {
 		if (currentState == GameStates.PlayersTurn) {
 			camera.render(currentPlayersTurn.getDirection());
+			if(camera.isAnimatingTurn()) {
+				currentPlayersTurn.pause = true;
+			}
+			else {
+				currentPlayersTurn.pause = false;
+			}
 			if (!currentPlayersTurn.isMoving() && !processTile) {
 				processTile = true;
 			}

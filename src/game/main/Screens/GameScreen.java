@@ -78,6 +78,7 @@ public class GameScreen implements Screen, ButtonAction {
 		guiRenderer = new GuiRenderer(loader);
 		System.out.println("Screen Created");
 		initModels();
+		genTerrain();
 		ModelData m = OBJFileLoader.loadOBJ("Board2");
 		RawModel r = loader.loadToVAO(m.getVertices(), m.getTextureCoords(), m.getNormals(), m.getIndices());
 		r.setSize(m.getSize().x, m.getSize().y, m.getSize().z);
@@ -117,15 +118,21 @@ public class GameScreen implements Screen, ButtonAction {
 		rollDice.setActionMessage("RollDice");
 		buttons.add(rollDice);
 		guis.add(rollDice);
+<<<<<<< HEAD
 		//QuestionHandler.getRandomQuestion();
 		scoreLabel = new ScoreLabel(guiRenderer, gameStateManager);
+=======
+		///QuestionHandler.getRandomQuestion();
+>>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 	}
 	
 	
 	
 	@Override
 	public void render() {
-		
+		if (Mouse.isButtonDown(0)) {
+			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
+		}
 		//System.out.println("FPS: " + (60 / DisplayManager.getFrameTimeSeconds()));
 		gameStateManager.render();
 		//camera.move();
@@ -187,37 +194,17 @@ public class GameScreen implements Screen, ButtonAction {
 	}
 	
 	public void genTerrain() {
-		Random random = new Random();
-		for (int i = 0; i < 500; i++) {
-			if (i % 7 == 0) {
-				float x = random.nextFloat() * 800;
-				float z = random.nextFloat() * -800;
-				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(fern, random.nextInt(4), new Vector3f(x, y, z), 0, random.nextFloat() * 360, 0, 0.9f));
-
-				x = random.nextFloat() * 800;
-				z = random.nextFloat() * -800;
-				y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(grass, new Vector3f(x, y, z), 0, 0, 0, 1.8f));
-
-				x = random.nextFloat() * 800;
-				z = random.nextFloat() * -800;
-				y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(flower, new Vector3f(x, y, z), 0, 0, 0, 2.3f));
-			}
-
-			if (i % 3 == 0) {
-				float x = random.nextFloat() * 800;
-				float z = random.nextFloat() * -800;
-				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(bobble, new Vector3f(x, y, z), 0, random.nextFloat() * 360, 0, random.nextFloat() * 0.1f + 0.6f));
-
-				x = random.nextFloat() * 800;
-				z = random.nextFloat() * -800;
-				y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(tree, new Vector3f(x, y, z), 0, 0, 0, random.nextFloat() * 1 + 4));
-			}
-
+		RawModel model = OBJLoader.loadObjModel("pine", loader);
+		TexturedModel pine = new TexturedModel(model, new ModelTexture(loader.loadTexture("pine")));
+		//Side One
+		for (int x = 220; x < 560; x += 30) {
+			entities.add(new Entity(pine, new Vector3f(x, 0, -600), 0, 0, 0, 2));
+			entities.add(new Entity(pine, new Vector3f(x, 0, -200), 0, 0, 0, 2));
+		}
+		
+		for (int z = -230; z > -570; z -= 30) {
+			entities.add(new Entity(pine, new Vector3f(220, 0, z), 0, 0, 0, 2));
+			entities.add(new Entity(pine, new Vector3f(560, 0, z), 0, 0, 0, 2));
 		}
 	}
 
@@ -232,7 +219,9 @@ public class GameScreen implements Screen, ButtonAction {
 		System.out.println(action);
 		if (action != null) {
 			if (action == "Next Turn") {
-				gameStateManager.changeCurrentPlayer();
+				//gameStateManager.changeCurrentPlayer();
+				QuestionHandler.clearQuestion();
+				QuestionHandler.getRandomQuestion();
 			}
 			if (action.startsWith("Answer ")) {
 				System.out.println(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));

@@ -74,8 +74,13 @@ public class Player {
 
 
 	public void render() {
+<<<<<<< HEAD
 		delta = DisplayManager.getFrameTimeSeconds();
 		if (!pause) {
+=======
+		if (!pause) {
+			delta = DisplayManager.getFrameTimeSeconds();
+>>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 			if (moveTo) {
 				elapsedMovingTime += delta;
 				if (elapsedMovingTime >= totalMovementTime) {
@@ -103,10 +108,13 @@ public class Player {
 //					}
 					
 				}
+<<<<<<< HEAD
 		}
 		
+=======
+			}
+>>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 		}
-
 	}
 
 	public void movePieceTo(Vector3f pos, float seconds) {
