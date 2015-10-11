@@ -33,6 +33,8 @@ public class Camera {
 	private boolean animate = false;
 	private int speed = 2;
 	
+	private boolean changeDir = false;
+	
 	private float time = 0;
 	public Camera() {
 		//this.player = player;
@@ -46,19 +48,24 @@ public class Camera {
 		
 		time++;
 		
+		if (yawTransformPerSecond != yaw) {
+			yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
+			if (yawTransformPerSecond == yaw) {
+				//playerDirection++;
+			}
+		}
+		
 		if (turnPoint.size() > 0) {
+			animate = true;
 			if (time % speed == 0) {
 				this.position = turnPoint.get(turnPoint.size() - 1);
 				turnPoint.remove(turnPoint.size() - 1);
 			}
-			yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
-		}
-		
-		if (yawTransformPerSecond != yaw) {
 			//yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
 		}
 		
 		else {
+			animate = false;
 			if (playerDirection == 0) {
 				if (playerDirection != directionLastFrame) {
 					for (int i = 0; i < numberPoints; i++) {
@@ -67,7 +74,6 @@ public class Camera {
 				}
 				else {
 					pitch = 33;
-					
 					yawTransform = 0;
 					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
 					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
@@ -92,11 +98,10 @@ public class Camera {
 			}
 			else if (playerDirection == 2) {
 				if (playerDirection != directionLastFrame) {
-
 				}
 				else {
 					pitch = 33;
-					yawTransform = 180;
+					yawTransform = -90;
 					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
 					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
 					this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z - distanceFromPlayer;
@@ -115,13 +120,17 @@ public class Camera {
 				}
 			}
 		}
-
-
-
 		
-		yawTransformPerSecond = (yawTransform - yaw) / (120);
-		//System.out.println(yaw);
+		yawTransformPerSecond = ((float) (yawTransform - yaw) * 5f);
 		directionLastFrame = playerDirection;
+	}
+	
+	public boolean isAnimatingTurn() {
+		return animate;
+	}
+	
+	public void addPoints() {
+		
 	}
 
 	public void move() {

@@ -32,6 +32,7 @@ public class Player {
 	private int score = 0;
 	private ArrayList<Vector3f> path = new ArrayList<>();
 	public boolean canMove = true;
+	public boolean pause = false;
 	//private float startRotation;
 	Vector3f poss;
 
@@ -69,36 +70,37 @@ public class Player {
 
 
 	public void render() {
-		delta = DisplayManager.getFrameTimeSeconds();
-		if (moveTo) {
-			elapsedMovingTime += delta;
-			if (elapsedMovingTime >= totalMovementTime) {
-				if (path.size() > 1) {
-					path.remove(0);
-					elapsedMovingTime = 0;
-					movePieceTo(path.get(0), totalMovementTime);
-					//System.out.println(currentTile);
+		if (!pause) {
+			delta = DisplayManager.getFrameTimeSeconds();
+			if (moveTo) {
+				elapsedMovingTime += delta;
+				if (elapsedMovingTime >= totalMovementTime) {
+					if (path.size() > 1) {
+						path.remove(0);
+						elapsedMovingTime = 0;
+						movePieceTo(path.get(0), totalMovementTime);
+						//System.out.println(currentTile);
+					}
+					else {
+						path.remove(0);
+						moveTo = false;
+						elapsedMovingTime = 0;
+						totalMovementTime = 0;
+						movementPerSecond.x = 0;
+						movementPerSecond.y = 0;
+						movementPerSecond.z = 0;
+					}
+
 				}
 				else {
-					path.remove(0);
-					moveTo = false;
-					elapsedMovingTime = 0;
-					totalMovementTime = 0;
-					movementPerSecond.x = 0;
-					movementPerSecond.y = 0;
-					movementPerSecond.z = 0;
+					this.getPlayerPiece().increasePosition(movementPerSecond.x * delta, movementPerSecond.y * delta, movementPerSecond.z * delta);
+//					if (poss != null) {
+//						this.getPlayerPiece().setPosition(poss);
+//					}
+					
 				}
-
-			}
-			else {
-				this.getPlayerPiece().increasePosition(movementPerSecond.x * delta, movementPerSecond.y * delta, movementPerSecond.z * delta);
-//				if (poss != null) {
-//					this.getPlayerPiece().setPosition(poss);
-//				}
-				
 			}
 		}
-
 	}
 
 	public void movePieceTo(Vector3f pos, float seconds) {
