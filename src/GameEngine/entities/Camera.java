@@ -26,12 +26,12 @@ public class Camera {
 	private int numberPoints = 30;
 
 	private Vector3f position = new Vector3f(400, 50, -200);
-	private float pitch = 33;
+	private float pitch = 25;
 	private float yaw = 0;
 	private float roll;
 	//private float speed = 0.5f;
 	private boolean animate = false;
-	private int speed = 2;
+	private int speed = 1;
 	
 	private float time = 0;
 	public Camera() {
@@ -46,7 +46,12 @@ public class Camera {
 		
 		time++;
 		
+		if (yawTransformPerSecond != yaw) {
+			//yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
+		}
+		
 		if (turnPoint.size() > 0) {
+			currentPlayerTracking.pause = true;
 			if (time % speed == 0) {
 				this.position = turnPoint.get(turnPoint.size() - 1);
 				turnPoint.remove(turnPoint.size() - 1);
@@ -54,11 +59,10 @@ public class Camera {
 			yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
 		}
 		
-		if (yawTransformPerSecond != yaw) {
-			//yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
-		}
+		
 		
 		else {
+			currentPlayerTracking.pause = false;
 			if (playerDirection == 0) {
 				if (playerDirection != directionLastFrame) {
 					for (int i = 0; i < numberPoints; i++) {
@@ -92,7 +96,11 @@ public class Camera {
 			}
 			else if (playerDirection == 2) {
 				if (playerDirection != directionLastFrame) {
-
+					for (int i = 0; i <= numberPoints; i++) {
+					turnPoint.add(new Vector3f((float) ((currentPlayerTracking.getPlayerPiece().getPosition().x) + distanceFromPlayer * (Math.cos(Math.toRadians(90 / numberPoints) * i))), this.position.y,
+							(float) ((currentPlayerTracking.getPlayerPiece().getPosition().z) - (distanceFromPlayer * (Math.sin(Math.toRadians(90 / numberPoints) * i))))));
+					yawTransform = 90;
+					}
 				}
 				else {
 					pitch = 33;
@@ -115,12 +123,11 @@ public class Camera {
 				}
 			}
 		}
-
-
-
-		
-		yawTransformPerSecond = (yawTransform - yaw) / (120);
-		//System.out.println(yaw);
+		//yawTransformPerSecond = (float) ((yawTransform - yaw) / (float)((numberPoints * speed) / DisplayManager.getFpsCap()));
+		//System.out.println(yawTransformPerSecond);
+		//System.out.println((float)(numberPoints * speed) / 120);
+		//System.out.println((yawTransform - yaw));
+		yawTransformPerSecond = 240;
 		directionLastFrame = playerDirection;
 	}
 

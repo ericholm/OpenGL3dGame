@@ -65,6 +65,7 @@ public class GameScreen implements Screen, ButtonAction {
 	public ArrayList<Button> questionButtons = new ArrayList<Button>();
 	private GameStateManager gameStateManager;
 	private Boolean down = false;
+	private ScoreLabel scoreLabel;
 	
 	public GameScreen() {
 		
@@ -117,6 +118,7 @@ public class GameScreen implements Screen, ButtonAction {
 		buttons.add(rollDice);
 		guis.add(rollDice);
 		//QuestionHandler.getRandomQuestion();
+		scoreLabel = new ScoreLabel(guiRenderer, gameStateManager);
 	}
 	
 	
@@ -145,6 +147,7 @@ public class GameScreen implements Screen, ButtonAction {
 		guiRenderer.render(guis);
 		guiRenderer.render(questionGui);
 		guiRenderer.render(guisFont);
+		scoreLabel.render(guiRenderer);
 	}
 	
 	public void initModels() {

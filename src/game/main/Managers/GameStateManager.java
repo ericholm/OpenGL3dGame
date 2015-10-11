@@ -17,7 +17,7 @@ public class GameStateManager {
 	private Board board;
 	private Dice dice;
 	private boolean processTile = false;
-	private float playerSpeed = 0.2f;
+	private float playerSpeed = 0.8f;
 
 	public GameStateManager(GameStates state, Player currentPlayersTurn, Camera camera, ArrayList<Player> players, Board board) {
 		currentState = state;
@@ -72,6 +72,10 @@ public class GameStateManager {
 		else {
 			System.out.println("You landed on nothing");
 		}
+	}
+	
+	public Player getCurrentPlayer() {
+		return currentPlayersTurn;
 	}
 	
 	public void rollDice() {

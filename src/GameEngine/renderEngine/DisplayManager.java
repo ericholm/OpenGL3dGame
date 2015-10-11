@@ -16,10 +16,14 @@ public class DisplayManager {
 	private static final int FPS_CAP = 120;
 	private static boolean toggle = false;
 
-	private static final String TITLE = "3D Game Engine - ThinMatrix tutorial";
+	private static final String TITLE = "History Board Game";
 
 	private static long lastFrameTime;
 	private static float delta;
+	
+	public static int getFpsCap() {
+		return FPS_CAP;
+	}
 
 	public static void createDisplay() {
 

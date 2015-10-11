@@ -29,13 +29,10 @@ public class Player {
 	private Board board;
 	private float offset;
 	private int direction = 0;
-<<<<<<< HEAD
 	private ArrayList<Vector3f> path = new ArrayList<Vector3f>();
-=======
 	private int score = 0;
-	private ArrayList<Vector3f> path = new ArrayList<>();
 	public boolean canMove = true;
->>>>>>> 49ae2b60c20684b1dd87e2a469c918fda88692d9
+	public boolean pause = false;
 	//private float startRotation;
 	Vector3f poss;
 
@@ -45,6 +42,10 @@ public class Player {
 		this.playerId = playerId;
 		this.modelName = modelName;
 		this.textureName = texureName;
+	}
+	
+	public int getScore() {
+		return score;
 	}
 	
 	public int getDirection() {
@@ -74,33 +75,36 @@ public class Player {
 
 	public void render() {
 		delta = DisplayManager.getFrameTimeSeconds();
-		if (moveTo) {
-			elapsedMovingTime += delta;
-			if (elapsedMovingTime >= totalMovementTime) {
-				if (path.size() > 1) {
-					path.remove(0);
-					elapsedMovingTime = 0;
-					movePieceTo(path.get(0), totalMovementTime);
-					//System.out.println(currentTile);
+		if (!pause) {
+			if (moveTo) {
+				elapsedMovingTime += delta;
+				if (elapsedMovingTime >= totalMovementTime) {
+					if (path.size() > 1) {
+						path.remove(0);
+						elapsedMovingTime = 0;
+						movePieceTo(path.get(0), totalMovementTime);
+						//System.out.println(currentTile);
+					}
+					else {
+						path.remove(0);
+						moveTo = false;
+						elapsedMovingTime = 0;
+						totalMovementTime = 0;
+						movementPerSecond.x = 0;
+						movementPerSecond.y = 0;
+						movementPerSecond.z = 0;
+					}
+
 				}
 				else {
-					path.remove(0);
-					moveTo = false;
-					elapsedMovingTime = 0;
-					totalMovementTime = 0;
-					movementPerSecond.x = 0;
-					movementPerSecond.y = 0;
-					movementPerSecond.z = 0;
+					this.getPlayerPiece().increasePosition(movementPerSecond.x * delta, movementPerSecond.y * delta, movementPerSecond.z * delta);
+//					if (poss != null) {
+//						this.getPlayerPiece().setPosition(poss);
+//					}
+					
 				}
-
-			}
-			else {
-				this.getPlayerPiece().increasePosition(movementPerSecond.x * delta, movementPerSecond.y * delta, movementPerSecond.z * delta);
-//				if (poss != null) {
-//					this.getPlayerPiece().setPosition(poss);
-//				}
-				
-			}
+		}
+		
 		}
 
 	}
@@ -112,14 +116,11 @@ public class Player {
 			currentTile = 0;
 		}
 		totalMovementTime = seconds;
-<<<<<<< HEAD
 		//System.out.println(pos);
 		//System.out.println("Player: " + playerPiece.getPosition());
 //		movementPerSecond.x = (pos.x - this.getPlayerPiece().getPosition().x) / seconds;
 //		movementPerSecond.y = (pos.y - this.getPlayerPiece().getPosition().y) / seconds;
 //		movementPerSecond.z = (pos.z - this.getPlayerPiece().getPosition().z) / seconds;
-=======
->>>>>>> 49ae2b60c20684b1dd87e2a469c918fda88692d9
 		if (currentTile >= 0 && currentTile <= 3) {
 			//System.out.println("0 - 3");
 			direction = 0;

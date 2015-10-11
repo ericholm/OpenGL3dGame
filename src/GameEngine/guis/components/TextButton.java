@@ -15,7 +15,7 @@ public class TextButton extends Button{
 		int currentIndex = 0;
 		int chars = 0;
 		String[] words = text.split(" ");
-		ArrayList<String> lines = new ArrayList<>();
+		ArrayList<String> lines = new ArrayList<String>();
 		boolean first = true;
 		for (String word : words) {
 			if (chars + word.length() < charactersPerLine) {
