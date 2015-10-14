@@ -118,12 +118,9 @@ public class GameScreen implements Screen, ButtonAction {
 		rollDice.setActionMessage("RollDice");
 		buttons.add(rollDice);
 		guis.add(rollDice);
-<<<<<<< HEAD
 		//QuestionHandler.getRandomQuestion();
 		scoreLabel = new ScoreLabel(guiRenderer, gameStateManager);
-=======
 		///QuestionHandler.getRandomQuestion();
->>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 	}
 	
 	
@@ -218,18 +215,17 @@ public class GameScreen implements Screen, ButtonAction {
 	public void action(String action) {
 		System.out.println(action);
 		if (action != null) {
-			if (action == "Next Turn") {
+			if (action == "Next Turn" && !QuestionHandler.isQuestionOpen()) {
 				//gameStateManager.changeCurrentPlayer();
-				QuestionHandler.clearQuestion();
-				QuestionHandler.getRandomQuestion();
 			}
 			if (action.startsWith("Answer ")) {
-				System.out.println(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));
+				//System.out.println(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));
+				gameStateManager.handleAnswer(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));
 			}
 			if (action == "CloseQuestionGui") {
 				QuestionHandler.clearQuestion();
 			}
-			if (action == "RollDice") {
+			if (action == "RollDice" && !QuestionHandler.isQuestionOpen()) {
 				gameStateManager.rollDice();
 			}
 		}

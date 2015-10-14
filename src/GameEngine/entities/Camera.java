@@ -48,42 +48,21 @@ public class Camera {
 		
 		time++;
 		
-		if (yawTransformPerSecond != yaw) {
-<<<<<<< HEAD
-			//yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
-		}
-		
-		if (turnPoint.size() > 0) {
-			currentPlayerTracking.pause = true;
-=======
+		if (yawTransform != yaw) {
 			yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
-			if (yawTransformPerSecond == yaw) {
-				//playerDirection++;
-			}
 		}
 		
 		if (turnPoint.size() > 0) {
 			animate = true;
->>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 			if (time % speed == 0) {
 				this.position = turnPoint.get(turnPoint.size() - 1);
 				turnPoint.remove(turnPoint.size() - 1);
 			}
-<<<<<<< HEAD
-			yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
-		}
-		
-		
-		
-		else {
-			currentPlayerTracking.pause = false;
-=======
 			//yaw += yawTransformPerSecond * DisplayManager.getFrameTimeSeconds();
 		}
 		
 		else {
 			animate = false;
->>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 			if (playerDirection == 0) {
 				if (playerDirection != directionLastFrame) {
 					for (int i = 0; i < numberPoints; i++) {
@@ -116,18 +95,16 @@ public class Camera {
 			}
 			else if (playerDirection == 2) {
 				if (playerDirection != directionLastFrame) {
-<<<<<<< HEAD
-					for (int i = 0; i <= numberPoints; i++) {
-					turnPoint.add(new Vector3f((float) ((currentPlayerTracking.getPlayerPiece().getPosition().x) + distanceFromPlayer * (Math.cos(Math.toRadians(90 / numberPoints) * i))), this.position.y,
-							(float) ((currentPlayerTracking.getPlayerPiece().getPosition().z) - (distanceFromPlayer * (Math.sin(Math.toRadians(90 / numberPoints) * i))))));
-					yawTransform = 90;
-					}
-=======
->>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
+//					for (int i = 0; i <= numberPoints; i++) {
+//					turnPoint.add(new Vector3f((float) ((currentPlayerTracking.getPlayerPiece().getPosition().x) + distanceFromPlayer * (Math.cos(Math.toRadians(90 / numberPoints) * i))), this.position.y,
+//							(float) ((currentPlayerTracking.getPlayerPiece().getPosition().z) - (distanceFromPlayer * (Math.sin(Math.toRadians(90 / numberPoints) * i))))));
+					yawTransform = 180;
+					//yaw = 180;
+					//}
 				}
 				else {
 					pitch = 33;
-					yawTransform = -90;
+					yawTransform = 180;
 					this.position.x = currentPlayerTracking.getPlayerPiece().getPosition().x;
 					this.position.y = currentPlayerTracking.getPlayerPiece().getPosition().y + distanceFromPlayer / 1.5f;
 					this.position.z = currentPlayerTracking.getPlayerPiece().getPosition().z - distanceFromPlayer;
@@ -146,16 +123,11 @@ public class Camera {
 				}
 			}
 		}
-<<<<<<< HEAD
 		//yawTransformPerSecond = (float) ((yawTransform - yaw) / (float)((numberPoints * speed) / DisplayManager.getFpsCap()));
 		//System.out.println(yawTransformPerSecond);
 		//System.out.println((float)(numberPoints * speed) / 120);
 		//System.out.println((yawTransform - yaw));
-		yawTransformPerSecond = 240;
-=======
-		
 		yawTransformPerSecond = ((float) (yawTransform - yaw) * 5f);
->>>>>>> 9c05c76ac92813e67fa53200f77ee8a35b281728
 		directionLastFrame = playerDirection;
 	}
 	

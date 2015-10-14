@@ -17,19 +17,19 @@ public class Board extends Entity{
 		tiles.add(new Tile(new Vector3f(895, 0, 890), TileType.Collect, 200));
 		tiles.add(new Tile(new Vector3f(676, 0, 890), TileType.ChurchTax, 200));
 		tiles.add(new Tile(new Vector3f(513, 0, 890), TileType.Question));
-		tiles.add(new Tile(new Vector3f(350, 0, 890), TileType.SiegeFactory));
-		tiles.add(new Tile(new Vector3f(135, 0, 890), TileType.Nothing));
+		tiles.add(new Tile(new Vector3f(350, 0, 890), TileType.Question));
+		tiles.add(new Tile(new Vector3f(135, 0, 890), TileType.Question));
 		tiles.add(new Tile(new Vector3f(135, 0, 665), TileType.Question));
-		tiles.add(new Tile(new Vector3f(135, 0, 502), TileType.Barracks));
+		tiles.add(new Tile(new Vector3f(135, 0, 502), TileType.Question));
 		tiles.add(new Tile(new Vector3f(135, 0, 339), TileType.Question));
-		tiles.add(new Tile(new Vector3f(135, 0, 135), TileType.Nothing));
-		tiles.add(new Tile(new Vector3f(350, 0, 135), TileType.Barracks));
+		tiles.add(new Tile(new Vector3f(135, 0, 135), TileType.Question));
+		tiles.add(new Tile(new Vector3f(350, 0, 135), TileType.Question));
 		tiles.add(new Tile(new Vector3f(513, 0, 135), TileType.ChurchTax, 50));
 		tiles.add(new Tile(new Vector3f(676, 0, 135), TileType.Question));
-		tiles.add(new Tile(new Vector3f(895, 0, 135), TileType.Nothing));
+		tiles.add(new Tile(new Vector3f(895, 0, 135), TileType.Question));
 		tiles.add(new Tile(new Vector3f(895, 0, 350), TileType.Question));
 		tiles.add(new Tile(new Vector3f(895, 0, 513), TileType.Question));
-		tiles.add(new Tile(new Vector3f(895, 0, 676), TileType.ChurchTax, 100));
+		tiles.add(new Tile(new Vector3f(895, 0, 676), TileType.Question, 100));
 		
 		
 //		tiles.add(new Tile(new Vector3f(890, 0, 895), TileType.Nothing));

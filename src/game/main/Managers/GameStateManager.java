@@ -18,6 +18,8 @@ public class GameStateManager {
 	private Dice dice;
 	private boolean processTile = false;
 	private float playerSpeed = 0.8f;
+	private int tileMovement;
+	private int finalTileIndex;
 
 	public GameStateManager(GameStates state, Player currentPlayersTurn, Camera camera, ArrayList<Player> players, Board board) {
 		currentState = state;
@@ -50,9 +52,13 @@ public class GameStateManager {
 		}
 		//System.out.println(tileIndex);
 		currentPlayersTurn.movePieceToTile(tileIndex, board.tiles, playerSpeed);
+		processTile = true;
+		tileMovement = tiles;
+		finalTileIndex = tileIndex;
 	}
 
 	public void processTileType(TileType tile, int tilesMove, int currentTile) {
+		System.out.println(tile);
 		if (tile == TileType.Barracks) {
 			System.out.println("You landed on barracks");
 		}
@@ -84,18 +90,27 @@ public class GameStateManager {
 			//currentPlayersTurn.canMove = false;
 		}
 	}
+	
+	public void handleAnswer(QuestionReturn answer) {
+		if (answer.correct) {
+			currentPlayersTurn.increaseScore(answer.multiplier);
+		}
+	}
 
 	public void render() {
 		if (currentState == GameStates.PlayersTurn) {
-			camera.render(currentPlayersTurn.getDirection());
-			if(camera.isAnimatingTurn()) {
-				currentPlayersTurn.pause = true;
-			}
-			else {
-				currentPlayersTurn.pause = false;
-			}
-			if (!currentPlayersTurn.isMoving() && !processTile) {
-				processTile = true;
+			if (!QuestionHandler.isQuestionOpen()) {
+				camera.render(currentPlayersTurn.getDirection());
+				if(camera.isAnimatingTurn()) {
+					currentPlayersTurn.pause = true;
+				}
+				else {
+					currentPlayersTurn.pause = false;
+				}
+				if (!currentPlayersTurn.isMoving() && processTile) {
+					processTileType(board.tiles.get(finalTileIndex).getTileType(), tileMovement, currentPlayersTurn.getCurrentTileIndex());
+					processTile = false;
+				}
 			}
 		}
 		else if (currentState == GameStates.Attack) {

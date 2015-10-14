@@ -18,7 +18,7 @@ public class ScoreLabel {
 	public ScoreLabel(GuiRenderer renderer, GameStateManager manager) {
 		this.renderer = renderer;
 		this.manager = manager;
-		this.text = FontLoader.drawStringG("Score: " + score, 360, 360, score);
+		this.text = FontLoader.drawStringG("Score " + score, 50, 680, 0.03f);
 		System.out.println(renderer);
 		System.out.println(manager);
 		System.out.println(text);
@@ -28,7 +28,7 @@ public class ScoreLabel {
 		//System.out.println("Score Label");
 		if (manager.getCurrentPlayer().getScore() != score) {
 			score = manager.getCurrentPlayer().getScore();
-			text = FontLoader.drawStringG("Score: " + score, 50, 50, 0.2f);
+			text = FontLoader.drawStringG("Score " + score, 50, 680, 0.03f);
 		}
 		g.render(text);
 	}
