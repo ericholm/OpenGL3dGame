@@ -20,6 +20,10 @@ public class Tile {
 		this.modifier = modifier;
 	}
 	
+	public int getModifier() {
+		return modifier;
+	}
+	
 	public TileType getTileType() {
 		return tileType;
 	}

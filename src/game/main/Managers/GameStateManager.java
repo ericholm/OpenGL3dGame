@@ -2,13 +2,19 @@ package game.main.Managers;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.vector.Vector2f;
+
 import GameEngine.entities.Camera;
+import GameEngine.guis.GuiRenderer;
+import GameEngine.guis.components.ButtonAction;
+import GameEngine.guis.components.Dialog;
 import game.main.Player.Player;
+import game.main.Screens.GameScreen;
 import game.main.board.Board;
 import game.main.board.Dice;
 import game.main.board.TileType;
 
-public class GameStateManager {
+public class GameStateManager implements ButtonAction{
 
 	private Player currentPlayersTurn;
 	private Camera camera;
@@ -20,8 +26,11 @@ public class GameStateManager {
 	private float playerSpeed = 0.8f;
 	private int tileMovement;
 	private int finalTileIndex;
+	private Dialog dialog;
+	private GameScreen game;
 
-	public GameStateManager(GameStates state, Player currentPlayersTurn, Camera camera, ArrayList<Player> players, Board board) {
+	public GameStateManager(GameScreen game, GameStates state, Player currentPlayersTurn, Camera camera, ArrayList<Player> players, Board board) {
+		this.game = game;
 		currentState = state;
 		this.currentPlayersTurn = currentPlayersTurn;
 		this.camera = camera;
@@ -29,6 +38,10 @@ public class GameStateManager {
 		camera.setPlayerToTrack(currentPlayersTurn);
 		this.board = board;
 		dice = new Dice(1, 3);
+	}
+	
+	public GameScreen getGame() {
+		return game;
 	}
 
 	public void changeCurrentPlayer() {
@@ -64,9 +77,17 @@ public class GameStateManager {
 		}
 		else if(tile == TileType.ChurchTax) {
 			System.out.println("You landed on tax");
+			dialog = new Dialog(this, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Church Tax", "You lose 200 gold", " OK", 0.03f, 0.05f, this);
+			if (currentPlayersTurn.getScore() - board.tiles.get(currentTile + tilesMove).getModifier() <= 0) {
+				currentPlayersTurn.setScore(0);
+			}
+			else {
+				currentPlayersTurn.decreaseScore(board.tiles.get(currentTile + tilesMove).getModifier());
+			}
 		}
 		else if(tile == TileType.Question) {
 			System.out.println("You landed on question");
+			
 			QuestionHandler.getRandomQuestion();
 		}
 		else if(tile == TileType.SiegeFactory) {
@@ -74,6 +95,7 @@ public class GameStateManager {
 		}
 		else if(tile == TileType.Collect || (currentTile <= 15 && currentTile + tilesMove >= 16)) {
 			System.out.println("You passed collect");
+			currentPlayersTurn.increaseScore(board.tiles.get(currentTile + tilesMove).getModifier());
 		}
 		else {
 			System.out.println("You landed on nothing");
@@ -97,8 +119,14 @@ public class GameStateManager {
 		}
 	}
 
-	public void render() {
+	public void render(GuiRenderer g) {
 		if (currentState == GameStates.PlayersTurn) {
+			
+			if (dialog != null) {
+				g.render(dialog);
+				dialog.render(g);
+			}
+			
 			if (!QuestionHandler.isQuestionOpen()) {
 				camera.render(currentPlayersTurn.getDirection());
 				if(camera.isAnimatingTurn()) {
@@ -116,6 +144,11 @@ public class GameStateManager {
 		else if (currentState == GameStates.Attack) {
 
 		}
+	}
+
+	@Override
+	public void action(String action) {
+		dialog = null;
 	}
 
 }

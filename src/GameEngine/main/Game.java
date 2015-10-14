@@ -1,7 +1,6 @@
 package GameEngine.main;
 
 import org.lwjgl.opengl.Display;
-
 import GameEngine.renderEngine.DisplayManager;
 import game.main.Screens.GameScreen;
 

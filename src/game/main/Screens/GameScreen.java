@@ -46,7 +46,6 @@ public class GameScreen implements Screen, ButtonAction {
 	public ArrayList<GuiTexture> questionGui = new ArrayList<GuiTexture>();
 	public Animation c;
 	public Entity dragon;
-	//public List<Light> lights = new ArrayList<Light>();
 	public Light light;
 	public Loader loader = new Loader();
 	public MasterRenderer renderer;
@@ -67,8 +66,8 @@ public class GameScreen implements Screen, ButtonAction {
 	private Boolean down = false;
 	private ScoreLabel scoreLabel;
 	
-	public GameScreen() {
-		
+	public GameScreen(ArrayList<Player> players) {
+		this.players = players;
 	}
 	
 	@Override
@@ -85,12 +84,12 @@ public class GameScreen implements Screen, ButtonAction {
 		TexturedModel boardModel = new TexturedModel(r, new ModelTexture(loader.loadTexture("gui/BoardTexture")));
 		board = new Board(boardModel, new Vector3f(400, 1, -400), 0, 0, 0, 20);
 		entities.add(board);
-		players.add(new Player("Player1", 0, "Knight", "white", board));
-		players.add(new Player("Player2", 1, "King", "white", board));
+		//players.add(new Player("Player1", 0, "Knight", "white"));
+		//players.add(new Player("Player2", 1, "King", "white"));
 		int i = 0;
 		for (Player p : players) {
 			//p.init(loader, new Vector3f(board.startTile.x, board.startTile.y, board.startTile.z  + (i * 20)));
-			p.init(loader, new Vector3f(board.tiles.get(0).position.x, board.tiles.get(0).position.y, board.tiles.get(0).position.z), Float.valueOf(i * 20));
+			p.init(loader, new Vector3f(board.tiles.get(0).position.x, board.tiles.get(0).position.y, board.tiles.get(0).position.z), Float.valueOf(i * 20), board);
 			entities.add(p.getPlayerPiece());
 			
 			//p.movePieceToTile(3, board.tiles, 0.2f);
@@ -98,7 +97,7 @@ public class GameScreen implements Screen, ButtonAction {
 		}
 		System.out.println(board.tiles.get(1).position);
 		camera = new Camera();
-		gameStateManager = new GameStateManager(GameStates.PlayersTurn, players.get(0), camera, players, board);
+		gameStateManager = new GameStateManager(this, GameStates.PlayersTurn, players.get(0), camera, players, board);
 		ArrayList<Integer> t = new ArrayList<Integer>();
 		t.add(loader.loadTexture("gui/TextField"));
 		t.add(loader.loadTexture("gui/TextField-hover"));
@@ -119,7 +118,7 @@ public class GameScreen implements Screen, ButtonAction {
 		buttons.add(rollDice);
 		guis.add(rollDice);
 		//QuestionHandler.getRandomQuestion();
-		scoreLabel = new ScoreLabel(guiRenderer, gameStateManager);
+		scoreLabel = new ScoreLabel(gameStateManager, new GuiTexture(loader.loadTexture("gui/ScoreLabel"), new Vector2f(125,685), new Vector2f(0.19f,0.05f), 0, 0));
 		///QuestionHandler.getRandomQuestion();
 	}
 	
@@ -131,7 +130,6 @@ public class GameScreen implements Screen, ButtonAction {
 			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
 		}
 		//System.out.println("FPS: " + (60 / DisplayManager.getFrameTimeSeconds()));
-		gameStateManager.render();
 		//camera.move();
 		//camera.render();
 		renderer.processTerrain(terrain);
@@ -147,10 +145,12 @@ public class GameScreen implements Screen, ButtonAction {
 		for (int i = 0; i < questionButtons.size(); i++) {
 			questionButtons.get(i).render(this);
 		}
+		
 		renderer.render(light, camera);
 		guiRenderer.render(guis);
 		guiRenderer.render(questionGui);
 		guiRenderer.render(guisFont);
+		gameStateManager.render(guiRenderer);
 		scoreLabel.render(guiRenderer);
 	}
 	
@@ -216,7 +216,7 @@ public class GameScreen implements Screen, ButtonAction {
 		System.out.println(action);
 		if (action != null) {
 			if (action == "Next Turn" && !QuestionHandler.isQuestionOpen()) {
-				//gameStateManager.changeCurrentPlayer();
+				gameStateManager.changeCurrentPlayer();
 			}
 			if (action.startsWith("Answer ")) {
 				//System.out.println(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));

@@ -10,6 +10,7 @@ import GameEngine.guis.GuiTexture;
 import GameEngine.guis.components.Button;
 import GameEngine.guis.components.ButtonAction;
 import GameEngine.guis.components.SelectScreenButton;
+import GameEngine.guis.components.TextButton;
 import GameEngine.guis.components.TextField;
 import GameEngine.main.Screen;
 import GameEngine.renderEngine.Loader;
@@ -26,6 +27,9 @@ public class StartScreen implements Screen, ButtonAction{
 	private boolean render = true;
 	private int buttonClickState = 0;
 	private Main game;
+//	private SelectScreenButton knightPiece;
+//	private SelectScreenButton kingPiece;
+//	private SelectScreenButton queenPiece;
 	private SelectScreenButton knightPiece;
 	private SelectScreenButton kingPiece;
 	private SelectScreenButton queenPiece;
@@ -51,9 +55,18 @@ public class StartScreen implements Screen, ButtonAction{
 
 	@Override
 	public void create() {
-		knightPiece  = new SelectScreenButton(loader.loadTexture("gui/KnightSelectButton"), new Vector2f(900, 350), new Vector2f(0.17f, 0.1f), 418, 100, "knightPiece");
-		kingPiece = new SelectScreenButton(loader.loadTexture("gui/QueenSelectButton"), new Vector2f(640, 350), new Vector2f(0.17f, 0.1f), 418, 100, "queenPiece");
-		queenPiece = new SelectScreenButton(loader.loadTexture("gui/KingSelectButton"), new Vector2f(400, 350), new Vector2f(0.17f, 0.1f), 418, 100, "kingPiece");
+		ArrayList<Integer> t1 = new ArrayList<Integer>();
+		t1.add(loader.loadTexture("gui/KnightSelectButton"));
+		t1.add(loader.loadTexture("gui/KnightSelectButtonHover"));
+		ArrayList<Integer> t2 = new ArrayList<Integer>();
+		t2.add(loader.loadTexture("gui/QueenSelectButton"));
+		t2.add(loader.loadTexture("gui/QueenSelectButtonHover"));
+		ArrayList<Integer> t3 = new ArrayList<Integer>();
+		t3.add(loader.loadTexture("gui/KingSelectButton"));
+		t3.add(loader.loadTexture("gui/KingSelectButtonHover"));
+		knightPiece  = new SelectScreenButton(t1, new Vector2f(900, 350), new Vector2f(0.17f, 0.1f), 211, 67, "Knight");
+		kingPiece = new SelectScreenButton(t3, new Vector2f(640, 350), new Vector2f(0.17f, 0.1f), 211, 67, "King");
+		queenPiece = new SelectScreenButton(t2, new Vector2f(400, 350), new Vector2f(0.17f, 0.1f), 211, 67, "Queen");
 		guiRenderer = new GuiRenderer(loader);
 		guis.add(new GuiTexture(loader.loadTexture("gui/Castle"), new Vector2f(640, 360), new Vector2f(1f, 1f), 0, 0));
 		guis.add(new GuiTexture(loader.loadTexture("gui/TitleStartScreen"), new Vector2f(640, 400), new Vector2f(1f, 1f), 0, 0));
@@ -94,6 +107,9 @@ public class StartScreen implements Screen, ButtonAction{
 		guis.add(kingPiece);
 		guis.add(queenPiece);
 		guis.add(knightPiece);
+		buttons.add(kingPiece);
+		buttons.add(queenPiece);
+		buttons.add(knightPiece);
 	}
 
 	@Override
@@ -113,12 +129,12 @@ public class StartScreen implements Screen, ButtonAction{
 			playerCreationScreen1();
 		}
 		else if (buttonClickState == 1 && action == null) {
-			players.add(new Player("Player 1", 0, selectedPiece, selectedPiece));
+			players.add(new Player("Player 1", 0, selectedPiece, "white"));
 			playerCreationScreen2();
 		}
 		else if (buttonClickState == 2 && action == null) {
-			players.add(new Player("Player 2", 1, selectedPiece, selectedPiece));
-			game.setScreen(new GameScreen());
+			players.add(new Player("Player 2", 1, selectedPiece, "white"));
+			game.setScreen(new GameScreen(players));
 			System.out.println("Player 1: " + players.get(0).getModelName());
 			System.out.println("Player 2: " + players.get(1).getModelName());
 		}

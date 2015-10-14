@@ -36,12 +36,19 @@ public class Player {
 	//private float startRotation;
 	Vector3f poss;
 
-	public Player(String name, int playerId, String modelName, String texureName, Board board) {
-		this.board = board;
+	public Player(String name, int playerId, String modelName, String texureName) {
 		this.name = name;
 		this.playerId = playerId;
 		this.modelName = modelName;
 		this.textureName = texureName;
+	}
+	
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	public void decreaseScore(int amount) {
+		this.score -= amount;
 	}
 
 	public int getScore() {
@@ -56,7 +63,8 @@ public class Player {
 		score += amount;
 	}
 
-	public void init(Loader loader, Vector3f startPos, float offset) {
+	public void init(Loader loader, Vector3f startPos, float offset, Board board) {
+		this.board = board;
 		this.offset = offset;
 		RawModel r = OBJLoader.loadObjModel(modelName, loader);
 		TexturedModel m = new TexturedModel(r, new ModelTexture(loader.loadTexture(textureName)));

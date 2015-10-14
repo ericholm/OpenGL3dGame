@@ -11,25 +11,23 @@ import GameEngine.guis.GuiTexture;
 public class ScoreLabel {
 	
 	private int score = 0;
-	private GuiRenderer renderer;
 	private GameStateManager manager;
 	private ArrayList<GuiTexture> text;
+	private GuiTexture background;
 	
-	public ScoreLabel(GuiRenderer renderer, GameStateManager manager) {
-		this.renderer = renderer;
+	public ScoreLabel(GameStateManager manager, GuiTexture background) {
+		this.background = background;
 		this.manager = manager;
-		this.text = FontLoader.drawStringG("Score " + score, 50, 680, 0.03f);
-		System.out.println(renderer);
-		System.out.println(manager);
-		System.out.println(text);
+		this.text = FontLoader.drawStringG("Score " + score, 55, 680, 0.03f);
 	}
 	
 	public void render(GuiRenderer g) {
 		//System.out.println("Score Label");
 		if (manager.getCurrentPlayer().getScore() != score) {
 			score = manager.getCurrentPlayer().getScore();
-			text = FontLoader.drawStringG("Score " + score, 50, 680, 0.03f);
+			text = FontLoader.drawStringG("Score " + score, 55, 680, 0.03f);
 		}
+		g.render(background);
 		g.render(text);
 	}
 	

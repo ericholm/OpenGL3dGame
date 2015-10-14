@@ -16,10 +16,10 @@ public class Board extends Entity{
 		super(model, position, rotX, rotY, rotZ, scale);
 		tiles.add(new Tile(new Vector3f(895, 0, 890), TileType.Collect, 200));
 		tiles.add(new Tile(new Vector3f(676, 0, 890), TileType.ChurchTax, 200));
-		tiles.add(new Tile(new Vector3f(513, 0, 890), TileType.Question));
-		tiles.add(new Tile(new Vector3f(350, 0, 890), TileType.Question));
-		tiles.add(new Tile(new Vector3f(135, 0, 890), TileType.Question));
-		tiles.add(new Tile(new Vector3f(135, 0, 665), TileType.Question));
+		tiles.add(new Tile(new Vector3f(513, 0, 890), TileType.ChurchTax, 200));
+		tiles.add(new Tile(new Vector3f(350, 0, 890), TileType.ChurchTax, 200));
+		tiles.add(new Tile(new Vector3f(135, 0, 890), TileType.ChurchTax, 200));
+		tiles.add(new Tile(new Vector3f(135, 0, 665), TileType.ChurchTax, 200));
 		tiles.add(new Tile(new Vector3f(135, 0, 502), TileType.Question));
 		tiles.add(new Tile(new Vector3f(135, 0, 339), TileType.Question));
 		tiles.add(new Tile(new Vector3f(135, 0, 135), TileType.Question));

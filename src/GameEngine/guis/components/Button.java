@@ -47,13 +47,12 @@ public class Button extends GuiTexture{
 			else {
 				this.setTexture(0);
 				mouseLeftButton = true;
-
-
 			}
 		}
 
 		if (Mouse.isButtonDown(0) && !isButtonPressedLastFrame) {
-			//System.out.println("Mouse DOwn");
+			//System.out.println(actionMessage);
+			
 			isButtonPressedLastFrame = true;
 			//System.out.println(Mouse.getX() + ":" + Mouse.getY());
 			//System.out.println(this.getPosition().x + ":" + this.getPosition().y);
@@ -61,6 +60,7 @@ public class Button extends GuiTexture{
 			if (Mouse.getX() >= this.getPosition().x - (this.getWidth() / 2) && Mouse.getX() <= this.getPosition().x + (this.getWidth() / 2) &&
 					Mouse.getY() >= this.getPosition().y - (this.getHeight() / 2) && Mouse.getY() <= this.getPosition().y + (this.getHeight() / 2)) {
 				//System.out.println("Button Pressed");
+				//System.out.println(actionMessage);
 				if (actionMessage != null) {
 					action.action(actionMessage);
 				}

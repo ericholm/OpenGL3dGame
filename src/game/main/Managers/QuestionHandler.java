@@ -68,69 +68,83 @@ public class QuestionHandler {
 	}
 
 	public static void getRandomQuestion() {
-		clearQuestion();
-		questionOpen = true;
-		//System.out.println(charactersPerLine);
-		int objectIndex = random.nextInt(questions.size() - 1);
-		Question question = questionsNotUsed.get(objectIndex);
-		currentQuestion = question;
-		//questionsNotUsed.remove(objectIndex);
-		//Generate Question For Screen
-		currentQuestionsAnswer = question.getAnswerIndex();
-		game.questionGui.add(questionBackground);
-		String text = question.getQuestion();
-		FontLoader.drawString("Question", 360,(int) 580, 0.05f, true);
-		//		System.out.println(text);
-		//		int lines = (int) Math.ceil(((double)text.length() / (double) charactersPerLine));
-		//		System.out.println(lines);
-		//		for(int i = 0; i < lines; i++) {
-		//			FontLoader.drawString(text.substring(charactersPerLine * i, Math.min((charactersPerLine * (i + 1) - 1), text.length() - 1)), 400, 550 - (int) (i * FontLoader.newLineOffset), questionFontScale);
-		//		}
-
-		int currentIndex = 0;
-		int chars = 0;
-		String[] words = text.split(" ");
-		ArrayList<String> lines = new ArrayList<String>();
-		//System.out.println(charactersPerLine + ":" + text.length());
-		boolean first = true;
-		for (String word : words) {
-			//System.out.println(lines.size());
-			//System.out.println(word);
-			//System.out.println(chars + word.length());
-			if (chars + word.length() < charactersPerLine) {
-				if (first) {
-					lines.add(currentIndex, word);
-					first = false;
-					chars += word.length();
-				}
-				else {
-					String sentence = lines.get(currentIndex);
-					sentence += (" " + word);
-					lines.set(currentIndex, sentence);
-					chars += word.length();
-				}
+		if (questionsNotUsed.size() <= 0) {
+			questionsNotUsed = (ArrayList<Question>) questions.clone();
+			System.out.println(questions.size());
+			getRandomQuestion();
+		}
+		else {
+			clearQuestion();
+			questionOpen = true;
+			//System.out.println(charactersPerLine);
+			int objectIndex;
+			if (questionsNotUsed.size() == 1) {
+				objectIndex = 0;
 			}
 			else {
-				chars = 0;
-				currentIndex++;
-				lines.add(currentIndex, word);
-				chars += word.length();
+				objectIndex = random.nextInt(questionsNotUsed.size() - 1);
+			}
+			Question question = questionsNotUsed.get(objectIndex);
+			currentQuestion = question;
+			questionsNotUsed.remove(objectIndex);
+			//Generate Question For Screen
+			currentQuestionsAnswer = question.getAnswerIndex();
+			game.questionGui.add(questionBackground);
+			String text = question.getQuestion();
+			FontLoader.drawString("Question", 360,(int) 580, 0.05f, true);
+			//		System.out.println(text);
+			//		int lines = (int) Math.ceil(((double)text.length() / (double) charactersPerLine));
+			//		System.out.println(lines);
+			//		for(int i = 0; i < lines; i++) {
+			//			FontLoader.drawString(text.substring(charactersPerLine * i, Math.min((charactersPerLine * (i + 1) - 1), text.length() - 1)), 400, 550 - (int) (i * FontLoader.newLineOffset), questionFontScale);
+			//		}
+
+			int currentIndex = 0;
+			int chars = 0;
+			String[] words = text.split(" ");
+			ArrayList<String> lines = new ArrayList<String>();
+			//System.out.println(charactersPerLine + ":" + text.length());
+			boolean first = true;
+			for (String word : words) {
+				//System.out.println(lines.size());
+				//System.out.println(word);
+				//System.out.println(chars + word.length());
+				if (chars + word.length() < charactersPerLine) {
+					if (first) {
+						lines.add(currentIndex, word);
+						first = false;
+						chars += word.length();
+					}
+					else {
+						String sentence = lines.get(currentIndex);
+						sentence += (" " + word);
+						lines.set(currentIndex, sentence);
+						chars += word.length();
+					}
+				}
+				else {
+					chars = 0;
+					currentIndex++;
+					lines.add(currentIndex, word);
+					chars += word.length();
+				}
+			}
+			int i = 0;
+			for (String line : lines) {
+				FontLoader.drawString(line, 340,(int) 565 - 20 - (int)(FontLoader.newLineOffset * i), questionFontScale, true);
+				i++;
+			}
+
+			FontLoader.drawString("Answers", 360,(int) 390, 0.05f, true);
+			int answerId = 0;
+			for (String answer : question.getPossiblwAnswers()) {
+				TextButton answerButton = new TextButton(game.loader.loadTexture("gui/TextField"), new Vector2f(640, 300 - (answerId * 85) + 15),
+						new Vector2f(0.58f, 0.10f), 651, 70, answer, questionFontScale, true, game);
+				answerButton.setActionMessage("Answer " + answerId);
+				answerId++;
 			}
 		}
-		int i = 0;
-		for (String line : lines) {
-			FontLoader.drawString(line, 340,(int) 565 - 20 - (int)(FontLoader.newLineOffset * i), questionFontScale, true);
-			i++;
-		}
-
-		FontLoader.drawString("Answers", 360,(int) 390, 0.05f, true);
-		int answerId = 0;
-		for (String answer : question.getPossiblwAnswers()) {
-			TextButton answerButton = new TextButton(game.loader.loadTexture("gui/TextField"), new Vector2f(640, 300 - (answerId * 85) + 15),
-					new Vector2f(0.58f, 0.10f), 651, 70, answer, questionFontScale, true, game);
-			answerButton.setActionMessage("Answer " + answerId);
-			answerId++;
-		}
+		
 	}
 
 	public static QuestionReturn checkAnswer(int answer) {
@@ -139,7 +153,7 @@ public class QuestionHandler {
 			Dialog d = new Dialog(game, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Correct", "You  won 200 gold", " OK", 0.03f, 0.05f);
 			return new QuestionReturn(true, 200);
 		}
-		Dialog d = new Dialog(game, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Incorrect", "The correct answer is " + currentQuestionsAnswer + 1, " OK", 0.03f, 0.05f);
+		Dialog d = new Dialog(game, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Incorrect", "The correct answer is " + (currentQuestionsAnswer + 1), " OK", 0.03f, 0.05f);
 		return new QuestionReturn(false, 0);
 	}
 
