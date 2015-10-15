@@ -28,6 +28,7 @@ public class GameStateManager implements ButtonAction{
 	private int finalTileIndex;
 	private Dialog dialog;
 	private GameScreen game;
+	private int winningScore = 2500;
 
 	public GameStateManager(GameScreen game, GameStates state, Player currentPlayersTurn, Camera camera, ArrayList<Player> players, Board board) {
 		this.game = game;
@@ -37,11 +38,24 @@ public class GameStateManager implements ButtonAction{
 		this.players = players;
 		camera.setPlayerToTrack(currentPlayersTurn);
 		this.board = board;
-		dice = new Dice(1, 3);
+		dice = new Dice(1, 4);
 	}
 	
 	public GameScreen getGame() {
 		return game;
+	}
+	
+	public void movePlayerBack(int tiles) {
+		//System.out.println(tiles);
+		int tileIndex = currentPlayersTurn.getCurrentTileIndex() - tiles;
+		if (tileIndex >= 16) {
+			tileIndex -= 16;
+		}
+		//System.out.println(tileIndex);
+		currentPlayersTurn.movePieceToTileBack(tileIndex, board.tiles, playerSpeed);
+		processTile = true;
+		tileMovement = tiles;
+		finalTileIndex = tileIndex;
 	}
 
 	public void changeCurrentPlayer() {
@@ -72,30 +86,27 @@ public class GameStateManager implements ButtonAction{
 
 	public void processTileType(TileType tile, int tilesMove, int currentTile) {
 		System.out.println(tile);
-		if (tile == TileType.Barracks) {
-			System.out.println("You landed on barracks");
+		if (tile == TileType.Chance) {
+			System.out.println("You landed on Chance");
+			ChanceCardHandler.getRandomChanceCard();
 		}
 		else if(tile == TileType.ChurchTax) {
 			System.out.println("You landed on tax");
 			dialog = new Dialog(this, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Church Tax", "You lose 200 gold", " OK", 0.03f, 0.05f, this);
-			if (currentPlayersTurn.getScore() - board.tiles.get(currentTile + tilesMove).getModifier() <= 0) {
+			if (currentPlayersTurn.getScore() - 200 <= 0) {
 				currentPlayersTurn.setScore(0);
 			}
 			else {
-				currentPlayersTurn.decreaseScore(board.tiles.get(currentTile + tilesMove).getModifier());
+				currentPlayersTurn.decreaseScore(200);
 			}
 		}
 		else if(tile == TileType.Question) {
 			System.out.println("You landed on question");
-			
 			QuestionHandler.getRandomQuestion();
-		}
-		else if(tile == TileType.SiegeFactory) {
-			System.out.println("You landed on siege factory");
 		}
 		else if(tile == TileType.Collect || (currentTile <= 15 && currentTile + tilesMove >= 16)) {
 			System.out.println("You passed collect");
-			currentPlayersTurn.increaseScore(board.tiles.get(currentTile + tilesMove).getModifier());
+			currentPlayersTurn.increaseScore(200);
 		}
 		else {
 			System.out.println("You landed on nothing");
@@ -109,7 +120,7 @@ public class GameStateManager implements ButtonAction{
 	public void rollDice() {
 		if (currentPlayersTurn.canMove) {
 			movePlayer(dice.roll());
-			//currentPlayersTurn.canMove = false;
+			currentPlayersTurn.canMove = false;
 		}
 	}
 	
@@ -121,6 +132,10 @@ public class GameStateManager implements ButtonAction{
 
 	public void render(GuiRenderer g) {
 		if (currentState == GameStates.PlayersTurn) {
+			
+			if (currentPlayersTurn.getScore() >= winningScore) {
+				dialog = new Dialog(this, new Vector2f(640, 360), new Vector2f(0.3f, 0.3f), 0, 0, "Player " + (currentPlayersTurn.getPlayerId() + 1) + " Wins", "Congratulations You Won", "OK", 0.03f, 0.05f, this);
+			}
 			
 			if (dialog != null) {
 				g.render(dialog);
@@ -140,9 +155,6 @@ public class GameStateManager implements ButtonAction{
 					processTile = false;
 				}
 			}
-		}
-		else if (currentState == GameStates.Attack) {
-
 		}
 	}
 

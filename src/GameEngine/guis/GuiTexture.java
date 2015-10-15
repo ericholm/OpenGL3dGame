@@ -32,6 +32,9 @@ public class GuiTexture implements Cloneable{
 	}
 	
 	public void setRotation(Vector2f rotation) {
+		if (this.rotation == null) {
+			this.rotation = new Vector2f();
+		}
 		this.rotation = rotation;
 	}
 	

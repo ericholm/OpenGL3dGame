@@ -1,0 +1,8 @@
+Luck,100
+Luck,50
+Luck,200
+Luck,150
+Robbed,300
+Robbed,400
+Plague,500
+Luck,100

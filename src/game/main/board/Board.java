@@ -15,21 +15,21 @@ public class Board extends Entity{
 	public Board(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		tiles.add(new Tile(new Vector3f(895, 0, 890), TileType.Collect, 200));
-		tiles.add(new Tile(new Vector3f(676, 0, 890), TileType.ChurchTax, 200));
+		tiles.add(new Tile(new Vector3f(676, 0, 890), TileType.Chance));
 		tiles.add(new Tile(new Vector3f(513, 0, 890), TileType.ChurchTax, 200));
-		tiles.add(new Tile(new Vector3f(350, 0, 890), TileType.ChurchTax, 200));
-		tiles.add(new Tile(new Vector3f(135, 0, 890), TileType.ChurchTax, 200));
-		tiles.add(new Tile(new Vector3f(135, 0, 665), TileType.ChurchTax, 200));
-		tiles.add(new Tile(new Vector3f(135, 0, 502), TileType.Question));
-		tiles.add(new Tile(new Vector3f(135, 0, 339), TileType.Question));
-		tiles.add(new Tile(new Vector3f(135, 0, 135), TileType.Question));
+		tiles.add(new Tile(new Vector3f(350, 0, 890), TileType.Question));
+		tiles.add(new Tile(new Vector3f(135, 0, 890), TileType.Nothing));
+		tiles.add(new Tile(new Vector3f(135, 0, 665), TileType.Question));
+		tiles.add(new Tile(new Vector3f(135, 0, 502), TileType.Chance));
+		tiles.add(new Tile(new Vector3f(135, 0, 339), TileType.ChurchTax, 200));
+		tiles.add(new Tile(new Vector3f(135, 0, 135), TileType.Nothing));
 		tiles.add(new Tile(new Vector3f(350, 0, 135), TileType.Question));
-		tiles.add(new Tile(new Vector3f(513, 0, 135), TileType.ChurchTax, 50));
+		tiles.add(new Tile(new Vector3f(513, 0, 135), TileType.Chance));
 		tiles.add(new Tile(new Vector3f(676, 0, 135), TileType.Question));
-		tiles.add(new Tile(new Vector3f(895, 0, 135), TileType.Question));
+		tiles.add(new Tile(new Vector3f(895, 0, 135), TileType.Nothing));
 		tiles.add(new Tile(new Vector3f(895, 0, 350), TileType.Question));
-		tiles.add(new Tile(new Vector3f(895, 0, 513), TileType.Question));
-		tiles.add(new Tile(new Vector3f(895, 0, 676), TileType.Question, 100));
+		tiles.add(new Tile(new Vector3f(895, 0, 513), TileType.ChurchTax, 200));
+		tiles.add(new Tile(new Vector3f(895, 0, 676), TileType.Question));
 		
 		
 //		tiles.add(new Tile(new Vector3f(890, 0, 895), TileType.Nothing));

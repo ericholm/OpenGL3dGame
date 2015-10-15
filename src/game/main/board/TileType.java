@@ -5,7 +5,7 @@ public enum TileType {
 	Question, 
 	Barracks,
 	ChurchTax,
-	SiegeFactory,
+	Chance,
 	Collect,
 	Nothing;
 	

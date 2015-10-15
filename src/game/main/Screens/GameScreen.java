@@ -1,5 +1,7 @@
 package game.main.Screens;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,6 +34,7 @@ import GameEngine.terrains.Terrain;
 import GameEngine.textures.ModelTexture;
 import GameEngine.textures.TerrainTexture;
 import GameEngine.textures.TerrainTexturePack;
+import game.main.Managers.ChanceCardHandler;
 import game.main.Managers.GameStateManager;
 import game.main.Managers.GameStates;
 import game.main.Managers.QuestionHandler;
@@ -65,6 +68,7 @@ public class GameScreen implements Screen, ButtonAction {
 	private GameStateManager gameStateManager;
 	private Boolean down = false;
 	private ScoreLabel scoreLabel;
+	private PlayerLabel playerLabel;
 	
 	public GameScreen(ArrayList<Player> players) {
 		this.players = players;
@@ -119,7 +123,19 @@ public class GameScreen implements Screen, ButtonAction {
 		guis.add(rollDice);
 		//QuestionHandler.getRandomQuestion();
 		scoreLabel = new ScoreLabel(gameStateManager, new GuiTexture(loader.loadTexture("gui/ScoreLabel"), new Vector2f(125,685), new Vector2f(0.19f,0.05f), 0, 0));
+		playerLabel = new PlayerLabel(gameStateManager, new GuiTexture(loader.loadTexture("gui/ScoreLabel"), new Vector2f(640,685), new Vector2f(0.25f,0.07f), 0, 0));
 		///QuestionHandler.getRandomQuestion();
+		ChanceCardHandler.addGame(this);
+			try {
+				ChanceCardHandler.loadChanceCards("ChanceCards.txt");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public GameStateManager getGameStateManager() {
+		return gameStateManager;
 	}
 	
 	
@@ -152,6 +168,8 @@ public class GameScreen implements Screen, ButtonAction {
 		guiRenderer.render(guisFont);
 		gameStateManager.render(guiRenderer);
 		scoreLabel.render(guiRenderer);
+		playerLabel.render(guiRenderer);
+		ChanceCardHandler.render(guiRenderer);
 	}
 	
 	public void initModels() {
@@ -217,6 +235,8 @@ public class GameScreen implements Screen, ButtonAction {
 		if (action != null) {
 			if (action == "Next Turn" && !QuestionHandler.isQuestionOpen()) {
 				gameStateManager.changeCurrentPlayer();
+				//ChanceCardHandler.getRandomChanceCard();
+				//gameStateManager.movePlayerBack(1);
 			}
 			if (action.startsWith("Answer ")) {
 				//System.out.println(QuestionHandler.checkAnswer(Integer.valueOf(action.split(" ")[1])));

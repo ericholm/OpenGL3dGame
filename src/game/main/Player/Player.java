@@ -48,7 +48,12 @@ public class Player {
 	}
 	
 	public void decreaseScore(int amount) {
-		this.score -= amount;
+		if (this.score - amount <= 0) {
+			this.score = 0;
+		}
+		else {
+			this.score -= amount;
+		}
 	}
 
 	public int getScore() {
@@ -184,6 +189,15 @@ public void movePieceToTile(int tileIndex, ArrayList<Tile> tiles, float seconds)
 		for (int i = currentTile; i <= tileIndex; i++) {
 			path.add(tiles.get(i).position);
 		}
+	}
+	totalMovementTime = seconds;
+	moveTo = true;
+}
+
+public void movePieceToTileBack(int tileIndex, ArrayList<Tile> tiles, float seconds) {
+	//System.out.println(tileIndex);
+	for (int i = currentTile; i >= tileIndex; i--) {
+		path.add(tiles.get(i).position);
 	}
 	totalMovementTime = seconds;
 	moveTo = true;
