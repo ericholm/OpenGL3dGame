@@ -14,6 +14,7 @@ public class GuiTexture implements Cloneable{
 	private Vector2f position;
 	private Vector2f scale;
 	private int width, height;
+	private Vector2f rotation;
 
 	public GuiTexture(int texture, Vector2f position, Vector2f scale, int width, int height) {
 		this.texture = texture;
@@ -24,6 +25,23 @@ public class GuiTexture implements Cloneable{
 		//height = GL11.glGetTexLevelParameteri(texture, 0, GL11.GL_TEXTURE_HEIGHT);
 		this.width = width;
 		this.height = height;
+	}
+	
+	public Vector2f getRotation() {
+		return rotation;
+	}
+	
+	public void setRotation(Vector2f rotation) {
+		this.rotation = rotation;
+	}
+	
+	public void increaseRotation(Vector2f rotation) {
+		if (this.rotation == null) {
+			this.rotation = new Vector2f();
+		}
+		System.out.println(this.rotation);
+		this.rotation.x += rotation.x;
+		this.rotation.y += rotation.y;
 	}
 	
 	public GuiTexture(ArrayList<Integer> textures, Vector2f position, Vector2f scale, int width, int height) {

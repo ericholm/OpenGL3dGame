@@ -40,7 +40,15 @@ public class GuiRenderer {
 		//		}
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
-		Matrix4f matrix = Maths.createTransformationMatrix(gui.getGlPositon(), gui.getScale());
+		Matrix4f matrix;
+		if (gui.getRotation() != null) {
+			System.out.println("Rotate");
+			matrix = Maths.createTransformationMatrix(gui.getGlPositon(), gui.getRotation().x, gui.getRotation().y, gui.getScale());
+		}
+		else {
+			matrix = Maths.createTransformationMatrix(gui.getGlPositon(), gui.getScale());
+		}
+		
 		shader.loadTransformation(matrix);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -68,7 +76,14 @@ public class GuiRenderer {
 		for(int i = 0; i < guis.size(); i++) {
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, guis.get(i).getTexture());
-			Matrix4f matrix = Maths.createTransformationMatrix(guis.get(i).getGlPositon(), guis.get(i).getScale());
+			Matrix4f matrix;
+			if (guis.get(i).getRotation() != null) {
+				System.out.println("Rotate");
+				matrix = Maths.createTransformationMatrix(guis.get(i).getGlPositon(), guis.get(i).getRotation().x, guis.get(i).getRotation().y, guis.get(i).getScale());
+			}
+			else {
+				matrix = Maths.createTransformationMatrix(guis.get(i).getGlPositon(), guis.get(i).getScale());
+			}
 			shader.loadTransformation(matrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		}

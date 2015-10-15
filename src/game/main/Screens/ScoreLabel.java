@@ -4,6 +4,8 @@ import game.main.Managers.GameStateManager;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.vector.Vector2f;
+
 import GameEngine.font.FontLoader;
 import GameEngine.guis.GuiRenderer;
 import GameEngine.guis.GuiTexture;
@@ -23,6 +25,7 @@ public class ScoreLabel {
 	
 	public void render(GuiRenderer g) {
 		//System.out.println("Score Label");
+		background.increaseRotation(new Vector2f(1f, 0f));
 		if (manager.getCurrentPlayer().getScore() != score) {
 			score = manager.getCurrentPlayer().getScore();
 			text = FontLoader.drawStringG("Score " + score, 55, 680, 0.03f);
